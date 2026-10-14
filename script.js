@@ -149,8 +149,59 @@ function renderCards(leadsArray) {
 leadsContainer.addEventListener("click" , (e) => {
 
 if (e.target.closest(".card-upper-part")) {
+detailBackdrop.innerHTML = "";
+let card = e.target.closest(".card-upper-part");
+let cardID = Number(card.dataset.id);
 
-let card = e.target.closest(".card-upper-part")
+let clickedCard = leadsArray.find(lead => lead.id === cardID);
+
+detailBackdrop.innerHTML += `
+
+  <div class="w-full max-w-5xl h-[85vh] flex flex-col md:flex-row shadow-2xl rounded-sm overflow-hidden border border-light-border dark:border-dark-border relative">
+            <button class="js-close-detail absolute top-6 right-6 z-10 text-light-textSecondary dark:text-dark-textSecondary hover:text-light-textPrimary dark:hover:text-dark-textPrimary transition-colors w-10 h-10 bg-light-card dark:bg-dark-card rounded-full flex items-center justify-center shadow-sm">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            
+            <!-- Left Structural Pillar -->
+            <div class="md:w-1/3 bg-light-bg dark:bg-dark-bg border-b md:border-b-0 md:border-r border-light-border dark:border-dark-border p-8 md:p-12 flex flex-col justify-between overflow-y-auto">
+                <div>
+                    <div class="mb-12">
+                        <span class="js-detail-status inline-flex items-center space-x-2 border border-light-border dark:border-dark-border px-3 py-1 text-[10px] uppercase tracking-widest font-sans rounded-sm text-light-textPrimary dark:text-dark-textPrimary mb-8">
+                            <i class="fa-solid fa-circle text-[6px] text-light-textSecondary dark:text-dark-textSecondary"></i> <span>Status</span>
+                        </span>
+                        <p class="font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Client Identity</p>
+                        <h3 class="js-detail-name font-serif text-2xl text-light-textPrimary dark:text-dark-textPrimary">Client Name</h3>
+                    </div>
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <p class="font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Contact Email</p>
+                            <p class="js-detail-email font-sans tracking-wide text-sm text-light-textPrimary dark:text-dark-textPrimary truncate">${clickedCard.clientEmail}</p>
+                        </div>
+                        <div>
+                            <p class="font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Location</p>
+                            <p class="js-detail-location font-sans tracking-wide text-sm text-light-textPrimary dark:text-dark-textPrimary">City, Country</p>
+                        </div>
+                        <div>
+                            <p class="font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Sourced From</p>
+                            <p class="js-detail-platform font-sans tracking-wide text-sm text-light-textPrimary dark:text-dark-textPrimary capitalize">Platform</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Structural Pillar -->
+            <div class="md:w-2/3 bg-light-card dark:bg-dark-card p-8 md:p-16 overflow-y-auto">
+                <p class="font-sans text-xs uppercase tracking-[0.2em] text-light-accent dark:text-dark-accent mb-4">Project Overview</p>
+                <h2 class="js-detail-title font-serif text-4xl md:text-5xl font-medium leading-tight text-light-textPrimary dark:text-dark-textPrimary mb-10">Project Title</h2>
+                
+                <div class="js-detail-brief font-sans text-base leading-relaxed tracking-wide text-light-textSecondary dark:text-dark-textSecondary whitespace-pre-line max-w-2xl">
+                    Detailed narrative project brief overview text goes here. This space is dedicated completely to wide typography text delivery, maintaining an elite, expensive split visual look.
+                </div>
+            </div>
+        </div>           
+
+`
 
     console.log("upper part")
     detailBackdrop.classList.remove("hidden")
