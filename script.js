@@ -1,19 +1,41 @@
 const FormModalBackdrop = document.querySelector(".js-modal-backdrop");
 const addLeadBtn = document.querySelector(".js-add-lead-btn");
 const form = document.querySelector(".js-lead-form");
+const leadCard = document.querySelector(".lead-card");
 const leadsContainer = document.querySelector(".js-leads-container");
 const modalBackdrop = document.querySelector(".js-modal-backdrop");
+const detailBackdrop = document.querySelector(".js-detail-backdrop");
 
 let leadsArray = JSON.parse(localStorage.getItem("LSleadsArray")) || [];
 
 function saveToLS() {
-  localStorage.setItem("LSleadsArray", JSON.stringify(leadsArray)); 
+    localStorage.setItem("LSleadsArray", JSON.stringify(leadsArray));
 }
 
 addLeadBtn.addEventListener("click", () => {
     FormModalBackdrop.classList.remove("hidden")
     FormModalBackdrop.classList.add("flex")
 })
+
+function timeAgo(dateString) {
+    let diffMS = new Date() - new Date(dateString);
+
+    let minutes = Math.floor(diffMS / (1000 * 60));
+    let hours = Math.floor(diffMS / (1000 * 60 * 60));
+    let days = Math.floor(diffMS / (1000 * 60 * 60 * 24));
+    let weeks = Math.floor(days / 7);
+    let months = Math.floor(days / 30);
+    let years = Math.floor(days / 365);
+
+    if (minutes < 1) return "just now";
+    if (minutes < 60) return `${minutes} ${minutes === 1 ? "minute" : "minutes"}`;
+    if (hours < 24) return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
+    if (days < 7) return `${days} ${days === 1 ? "day" : "days"} ago`;
+    if (days < 30) return `${weeks} ${weeks === 1 ? "week" : "weeks"} ago`;
+    if (days < 365) return `${months} ${months === 1 ? "month" : "months"} ago`;
+    return `${years} ${years === 1 ? "year" : "years"} ago`;
+
+}
 
 form.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -35,6 +57,7 @@ form.addEventListener("submit", function (e) {
 
     leadsArray.push(newLead);
     saveToLS();
+    renderCards(leadsArray);
     console.log(leadsArray)
     form.reset();
     FormModalBackdrop.classList.add("hidden")
@@ -51,33 +74,45 @@ modalBackdrop.addEventListener("click", function (e) {
 
 });
 
+detailBackdrop.addEventListener("click" , (e) => {
+if (e.target === detailBackdrop) {
+    detailBackdrop.classList.add("hidden");
+    
+}
+    else if (e.target.closest(".js-close-detail")) {
+        detailBackdrop.classList.add("hidden");
+    }
 
-function renderCards() {
+})
+
+renderCards(leadsArray);
+
+function renderCards(leadsArray) {
     leadsContainer.innerHTML = "";
 
-leadsArray.forEach(lead => {
+    leadsArray.forEach(lead => {
 
-leadsContainer.innerHTML += `
+        leadsContainer.innerHTML += `
 
  <article class="lead-card flex flex-col bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-sm transition-all hover:border-light-accent dark:hover:border-dark-accent group" data-id="1">
-                <div class="p-6 flex-1 flex flex-col">
+                <div class="${lead.id} card-upper-part p-6 flex-1 flex flex-col">
                     <div class="flex justify-between items-start mb-4">
                         <span class="inline-flex items-center space-x-2 border border-[#D97706]/30 dark:border-[#F59E0B]/30 bg-[#FFFBEB] dark:bg-[#451A03]/20 text-[#B45309] dark:text-[#FBBF24] px-3 py-1 text-[10px] uppercase tracking-widest font-sans rounded-sm">
                             <i class="fa-solid fa-clock text-[8px]"></i> <span>${lead.leadStatus}</span>
                         </span>
-                        <span class="js-lead-ago text-light-textSecondary dark:text-dark-textSecondary font-sans text-xs tracking-wide">2 hrs ago</span>
+                        <span class="js-lead-ago text-light-textSecondary dark:text-dark-textSecondary font-sans text-xs tracking-wide">${timeAgo(lead.leadAddedDate)}</span>
                     </div>
-                    <h2 class="js-lead-project-title font-serif text-xl font-medium text-light-textPrimary dark:text-dark-textPrimary mb-1 line-clamp-2">E-Commerce Brand Identity Redesign</h2>
-                    <p class="js-lead-name font-sans text-sm tracking-wide text-light-textSecondary dark:text-dark-textSecondary mb-6">Alexandra Dupont</p>
+                    <h2 class="js-lead-project-title font-serif text-xl font-medium text-light-textPrimary dark:text-dark-textPrimary mb-1 line-clamp-2">${lead.projectTitle}</h2>
+                    <p class="js-lead-name font-sans text-sm tracking-wide text-light-textSecondary dark:text-dark-textSecondary mb-6">${lead.clientName}</p>
                     
                     <div class="mt-auto pt-6 border-t border-light-border dark:border-dark-border flex justify-between items-end">
                         <div>
                             <p class="font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-1">Budget</p>
-                            <p class="font-sans text-lg tracking-wider font-light text-light-textPrimary dark:text-dark-textPrimary">$4,500</p>
+                            <p class="font-sans text-lg tracking-wider font-light text-light-textPrimary dark:text-dark-textPrimary">$${lead.budget}</p>
                         </div>
                         <div class="flex items-center space-x-2 text-light-textSecondary dark:text-dark-textSecondary font-sans text-xs tracking-wider">
-                            <i class="fa-brands fa-linkedin"></i>
-                            <span>LinkedIn</span>
+                            <i class="fa-brands fa-${lead.platform.toLowerCase()}"></i>
+                            <span>${lead.platform}</span>
                         </div>
                     </div>
                 </div>
@@ -105,8 +140,22 @@ leadsContainer.innerHTML += `
                 <span class="js-lead-date hidden">2023-10-14</span>
             </article>
 
-` 
-    
-})
+`
+
+    })
 
 }
+
+leadsContainer.addEventListener("click" , (e) => {
+
+if (e.target.closest(".card-upper-part")) {
+
+let card = e.target.closest(".card-upper-part")
+
+    console.log("upper part")
+    detailBackdrop.classList.remove("hidden")
+    detailBackdrop.classList.add("flex")
+}
+
+
+})
