@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freelance Leads Tracker</title>
+    
+    <!-- Google Fonts: Playfair Display (Serif) & Inter (Geometric Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    },
+                    colors: {
+                        light: {
+                            bg: '#F4F4F0',
+                            card: '#FFFFFF',
+                            textPrimary: '#1C1F26',
+                            textSecondary: '#626875',
+                            border: '#E3E3DE',
+                            accent: '#A6845B'
+                        },
+                        dark: {
+                            bg: '#090A0D',
+                            card: '#121419',
+                            textPrimary: '#EBEBEB',
+                            textSecondary: '#8B91A0',
+                            border: '#1F222B',
+                            accent: '#C7A97D'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Premium Ultra-Thin Custom Scrollbar */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(98, 104, 117, 0.3) transparent;
+        }
+        
+        .dark * {
+            scrollbar-color: rgba(235, 235, 235, 0.1) #090A0D;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(98, 104, 117, 0.3); /* Minimal clean graphite in light mode */
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(98, 104, 117, 0.5);
+        }
+
+        /* Dark Mode Scrollbar Overrides */
+        .dark ::-webkit-scrollbar-track {
+            background: #090A0D; /* Blends directly into midnight obsidian */
+        }
+        
+        .dark ::-webkit-scrollbar-thumb {
+            background: rgba(235, 235, 235, 0.1); /* Translucent/subtle thumb */
+        }
+        
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: rgba(235, 235, 235, 0.2);
+        }
+
+        /* Override the previous hidden scrollbar behavior to apply our premium thin track instead */
+        .scrollbar-hide::-webkit-scrollbar { 
+            display: block; 
+        }
+        .scrollbar-hide { 
+            -ms-overflow-style: auto; 
+            scrollbar-width: thin; 
+        }
+    </style>
+</head>
+<body class="bg-light-bg dark:bg-dark-bg text-light-textPrimary dark:text-dark-textPrimary font-sans transition-colors duration-300 min-h-screen text-left">
+
+    <!-- MASTER WORKSPACE LAYOUT -->
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        
+        <!-- 1. HEADER BLOCK -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-light-border dark:border-dark-border pb-8 mb-12">
+            <div>
+                <p class="font-sans text-xs uppercase tracking-[0.2em] text-light-accent dark:text-dark-accent mb-2">Workspace</p>
+                <h1 class="font-serif text-4xl md:text-5xl font-medium tracking-wide text-light-textPrimary dark:text-dark-textPrimary">Client Pipeline</h1>
+            </div>
+            <div class="flex items-center space-x-4 mt-6 md:mt-0">
+                <button class="js-theme-toggle w-10 h-10 flex items-center justify-center rounded-sm bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border text-light-textSecondary dark:text-dark-textSecondary hover:text-light-textPrimary dark:hover:text-dark-textPrimary transition-colors">
+                    <i class="fa-solid fa-circle-half-stroke"></i>
+                </button>
+                <button class="js-export-btn font-sans tracking-widest text-xs uppercase px-5 py-3 rounded-sm bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border text-light-textSecondary dark:text-dark-textSecondary hover:border-light-textPrimary dark:hover:border-dark-textPrimary transition-all">
+                    Export CSV
+                </button>
+                <button class="js-add-lead-btn font-sans tracking-widest text-xs uppercase px-6 py-3 rounded-sm bg-light-textPrimary dark:bg-dark-textPrimary text-light-bg dark:text-dark-bg hover:bg-light-accent dark:hover:bg-dark-accent transition-all">
+                    Add Lead
+                </button>
+            </div>
+        </header>
+
+        <!-- 2. INTEL METRICS & PIPELINE STATS ROW -->
+        <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
+            <div class="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-6 rounded-sm">
+                <h3 class="font-sans text-xs uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-3">Total Leads</h3>
+                <p class="js-stat-total font-serif text-3xl text-light-textPrimary dark:text-dark-textPrimary">0</p>
+            </div>
+            <div class="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-6 rounded-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-16 h-16 bg-light-accent dark:bg-dark-accent opacity-5 rounded-bl-full"></div>
+                <h3 class="font-sans text-xs uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-3">Pipeline Value</h3>
+                <p class="js-stat-pipeline font-sans tracking-wider text-3xl font-light text-light-textPrimary dark:text-dark-textPrimary">$0.00</p>
+            </div>
+            <div class="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-6 rounded-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-16 h-16 bg-light-textPrimary dark:bg-dark-textPrimary opacity-5 rounded-bl-full"></div>
+                <h3 class="font-sans text-xs uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-3">Won Earnings</h3>
+                <p class="js-stat-won font-sans tracking-wider text-3xl font-light text-light-textPrimary dark:text-dark-textPrimary">$0.00</p>
+            </div>
+            <div class="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-6 rounded-sm">
+                <h3 class="font-sans text-xs uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-3">Win Rate (%)</h3>
+                <p class="js-stat-winrate font-sans tracking-wider text-3xl font-light text-light-textPrimary dark:text-dark-textPrimary">0%</p>
+            </div>
+        </section>
+
+        <!-- 3. COMPLEX TOOLBAR SECTION -->
+        <section class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-10 bg-light-card dark:bg-dark-card p-4 border border-light-border dark:border-dark-border rounded-sm">
+            <div class="flex flex-col sm:flex-row gap-4 flex-1">
+                <div class="relative flex-1 max-w-md">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-light-textSecondary dark:text-dark-textSecondary text-xs"></i>
+                    <input type="text" class="js-search-input w-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-textPrimary dark:text-dark-textPrimary focus:border-light-accent dark:focus:border-dark-accent focus:ring-1 focus:ring-light-accent dark:focus:ring-dark-accent outline-none font-sans text-sm tracking-wide py-3 pl-10 pr-4 rounded-sm placeholder-light-textSecondary dark:placeholder-dark-textSecondary transition-colors" placeholder="Search by client name">
+                </div>
+                <div class="relative">
+                    <select class="js-platform-filter appearance-none bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-textPrimary dark:text-dark-textPrimary focus:border-light-accent dark:focus:border-dark-accent focus:ring-1 focus:ring-light-accent dark:focus:ring-dark-accent outline-none font-sans text-sm tracking-wide py-3 pl-5 pr-12 rounded-sm cursor-pointer transition-colors">
+                        <option value="all">All Platforms</option>
+                        <option value="upwork">Upwork</option>
+                        <option value="fiverr">Fiverr</option>
+                        <option value="linkedin">LinkedIn</option>
+                        <option value="instagram">Instagram</option>
+                        <option value="whatsapp">WhatsApp</option>
+                        <option value="facebook">Facebook</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-light-textSecondary dark:text-dark-textSecondary text-xs pointer-events-none"></i>
+                </div>
+            </div>
+            
+            <div class="js-status-row flex space-x-2 overflow-x-auto scrollbar-hide py-1">
+                <button class="filter-btn font-sans text-xs tracking-widest uppercase px-5 py-2.5 rounded-sm transition-all bg-light-textPrimary dark:bg-dark-textPrimary text-light-bg dark:text-dark-bg border border-transparent" data-status="all">All</button>
+                <button class="filter-btn font-sans text-xs tracking-widest uppercase px-5 py-2.5 rounded-sm transition-all bg-transparent text-light-textSecondary dark:text-dark-textSecondary border border-light-border dark:border-dark-border hover:bg-light-textPrimary/5 dark:hover:bg-white/5" data-status="pending">Pending</button>
+                <button class="filter-btn font-sans text-xs tracking-widest uppercase px-5 py-2.5 rounded-sm transition-all bg-transparent text-light-textSecondary dark:text-dark-textSecondary border border-light-border dark:border-dark-border hover:bg-light-textPrimary/5 dark:hover:bg-white/5" data-status="contacted">Contacted</button>
+                <button class="filter-btn font-sans text-xs tracking-widest uppercase px-5 py-2.5 rounded-sm transition-all bg-transparent text-light-textSecondary dark:text-dark-textSecondary border border-light-border dark:border-dark-border hover:bg-light-textPrimary/5 dark:hover:bg-white/5" data-status="won">Won</button>
+                <button class="filter-btn font-sans text-xs tracking-widest uppercase px-5 py-2.5 rounded-sm transition-all bg-transparent text-light-textSecondary dark:text-dark-textSecondary border border-light-border dark:border-dark-border hover:bg-light-textPrimary/5 dark:hover:bg-white/5" data-status="lost">Lost</button>
+            </div>
+        </section>
+
+        <!-- 4. LEADS GRID CONTAINER -->
+        <section class="js-leads-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            
+            <!-- Sample Card 1: Pending -->
+            <article class="lead-card flex flex-col bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-sm transition-all hover:border-light-accent dark:hover:border-dark-accent group" data-id="1">
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="inline-flex items-center space-x-2 border border-[#D97706]/30 dark:border-[#F59E0B]/30 bg-[#FFFBEB] dark:bg-[#451A03]/20 text-[#B45309] dark:text-[#FBBF24] px-3 py-1 text-[10px] uppercase tracking-widest font-sans rounded-sm">
+                            <i class="fa-solid fa-clock text-[8px]"></i> <span>Pending</span>
+                        </span>
+                        <span class="js-lead-ago text-light-textSecondary dark:text-dark-textSecondary font-sans text-xs tracking-wide">2 hrs ago</span>
+                    </div>
+                    <h2 class="js-lead-project-title font-serif text-xl font-medium text-light-textPrimary dark:text-dark-textPrimary mb-1 line-clamp-2">E-Commerce Brand Identity Redesign</h2>
+                    <p class="js-lead-name font-sans text-sm tracking-wide text-light-textSecondary dark:text-dark-textSecondary mb-6">Alexandra Dupont</p>
+                    
+                    <div class="mt-auto pt-6 border-t border-light-border dark:border-dark-border flex justify-between items-end">
+                        <div>
+                            <p class="font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-1">Budget</p>
+                            <p class="font-sans text-lg tracking-wider font-light text-light-textPrimary dark:text-dark-textPrimary">$4,500</p>
+                        </div>
+                        <div class="flex items-center space-x-2 text-light-textSecondary dark:text-dark-textSecondary font-sans text-xs tracking-wider">
+                            <i class="fa-brands fa-linkedin"></i>
+                            <span>LinkedIn</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-light-bg dark:bg-dark-bg border-t border-light-border dark:border-dark-border p-4 flex justify-between items-center rounded-b-sm">
+                    <div class="relative w-36">
+                        <select class="js-status-select w-full appearance-none bg-transparent text-light-textPrimary dark:text-dark-textPrimary border border-light-border dark:border-dark-border font-sans text-xs tracking-widest uppercase py-2 pl-3 pr-8 outline-none rounded-sm cursor-pointer focus:border-light-accent dark:focus:border-dark-accent transition-colors">
+                            <option value="pending" selected>Pending</option>
+                            <option value="contacted">Contacted</option>
+                            <option value="won">Won</option>
+                            <option value="lost">Lost</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-light-textSecondary dark:text-dark-textSecondary text-[10px] pointer-events-none"></i>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button class="js-edit-btn text-light-textSecondary dark:text-dark-textSecondary hover:text-light-accent dark:hover:text-dark-accent transition-colors"><i class="fa-regular fa-pen-to-square text-sm"></i></button>
+                        <button class="js-delete-btn text-light-textSecondary dark:text-dark-textSecondary hover:text-red-700 dark:hover:text-red-400 transition-colors"><i class="fa-regular fa-trash-can text-sm"></i></button>
+                    </div>
+                </div>
+                <!-- Hidden elements for structural specs -->
+                <span class="js-lead-date hidden">2023-10-14</span>
+            </article>
+
+            <!-- Sample Card 2: Won -->
+            <article class="lead-card flex flex-col bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-sm transition-all hover:border-light-accent dark:hover:border-dark-accent group" data-id="2">
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="inline-flex items-center space-x-2 border border-[#059669]/30 dark:border-[#10B981]/30 bg-[#ECFDF5] dark:bg-[#064E3B]/20 text-[#047857] dark:text-[#34D399] px-3 py-1 text-[10px] uppercase tracking-widest font-sans rounded-sm">
+                            <i class="fa-solid fa-check-double text-[8px]"></i> <span>Won</span>
+                        </span>
+                        <span class="js-lead-ago text-light-textSecondary dark:text-dark-textSecondary font-sans text-xs tracking-wide">3 days ago</span>
+                    </div>
+                    <h2 class="js-lead-project-title font-serif text-xl font-medium text-light-textPrimary dark:text-dark-textPrimary mb-1 line-clamp-2">Fintech Mobile App UI/UX</h2>
+                    <p class="js-lead-name font-sans text-sm tracking-wide text-light-textSecondary dark:text-dark-textSecondary mb-6">Julian Blackwood</p>
+                    
+                    <div class="mt-auto pt-6 border-t border-light-border dark:border-dark-border flex justify-between items-end">
+                        <div>
+                            <p class="font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-1">Budget</p>
+                            <p class="font-sans text-lg tracking-wider font-light text-light-textPrimary dark:text-dark-textPrimary">$12,000</p>
+                        </div>
+                        <div class="flex items-center space-x-2 text-light-textSecondary dark:text-dark-textSecondary font-sans text-xs tracking-wider">
+                           <i class="fa-brands fa-upwork"></i>
+                            <span>Upwork</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-light-bg dark:bg-dark-bg border-t border-light-border dark:border-dark-border p-4 flex justify-between items-center rounded-b-sm">
+                    <div class="relative w-36">
+                        <select class="js-status-select w-full appearance-none bg-transparent text-light-textPrimary dark:text-dark-textPrimary border border-light-border dark:border-dark-border font-sans text-xs tracking-widest uppercase py-2 pl-3 pr-8 outline-none rounded-sm cursor-pointer focus:border-light-accent dark:focus:border-dark-accent transition-colors">
+                            <option value="pending">Pending</option>
+                            <option value="contacted">Contacted</option>
+                            <option value="won" selected>Won</option>
+                            <option value="lost">Lost</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-light-textSecondary dark:text-dark-textSecondary text-[10px] pointer-events-none"></i>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button class="js-edit-btn text-light-textSecondary dark:text-dark-textSecondary hover:text-light-accent dark:hover:text-dark-accent transition-colors"><i class="fa-regular fa-pen-to-square text-sm"></i></button>
+                        <button class="js-delete-btn text-light-textSecondary dark:text-dark-textSecondary hover:text-red-700 dark:hover:text-red-400 transition-colors"><i class="fa-regular fa-trash-can text-sm"></i></button>
+                    </div>
+                </div>
+                <!-- Hidden elements for structural specs -->
+                <span class="js-lead-date hidden">2023-10-11</span>
+            </article>
+
+            <!-- Sample Card 3: Lost -->
+            <article class="lead-card flex flex-col bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-sm transition-all hover:border-light-accent dark:hover:border-dark-accent group" data-id="3">
+                <div class="p-6 flex-1 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="inline-flex items-center space-x-2 border border-[#DC2626]/30 dark:border-[#EF4444]/30 bg-[#FEF2F2] dark:bg-[#7F1D1D]/20 text-[#B91C1C] dark:text-[#F87171] px-3 py-1 text-[10px] uppercase tracking-widest font-sans rounded-sm">
+                            <i class="fa-solid fa-xmark text-[10px]"></i> <span>Lost</span>
+                        </span>
+                        <span class="js-lead-ago text-light-textSecondary dark:text-dark-textSecondary font-sans text-xs tracking-wide">1 week ago</span>
+                    </div>
+                    <h2 class="js-lead-project-title font-serif text-xl font-medium text-light-textPrimary dark:text-dark-textPrimary mb-1 line-clamp-2">Luxury Real Estate Web Portal</h2>
+                    <p class="js-lead-name font-sans text-sm tracking-wide text-light-textSecondary dark:text-dark-textSecondary mb-6">M. Valois</p>
+                    
+                    <div class="mt-auto pt-6 border-t border-light-border dark:border-dark-border flex justify-between items-end">
+                        <div>
+                            <p class="font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-1">Budget</p>
+                            <p class="font-sans text-lg tracking-wider font-light text-light-textPrimary dark:text-dark-textPrimary">$8,000</p>
+                        </div>
+                        <div class="flex items-center space-x-2 text-light-textSecondary dark:text-dark-textSecondary font-sans text-xs tracking-wider">
+                            <i class="fa-regular fa-envelope"></i>
+                            <span>Other</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-light-bg dark:bg-dark-bg border-t border-light-border dark:border-dark-border p-4 flex justify-between items-center rounded-b-sm">
+                    <div class="relative w-36">
+                        <select class="js-status-select w-full appearance-none bg-transparent text-light-textPrimary dark:text-dark-textPrimary border border-light-border dark:border-dark-border font-sans text-xs tracking-widest uppercase py-2 pl-3 pr-8 outline-none rounded-sm cursor-pointer focus:border-light-accent dark:focus:border-dark-accent transition-colors">
+                            <option value="pending">Pending</option>
+                            <option value="contacted">Contacted</option>
+                            <option value="won">Won</option>
+                            <option value="lost" selected>Lost</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-light-textSecondary dark:text-dark-textSecondary text-[10px] pointer-events-none"></i>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button class="js-edit-btn text-light-textSecondary dark:text-dark-textSecondary hover:text-light-accent dark:hover:text-dark-accent transition-colors"><i class="fa-regular fa-pen-to-square text-sm"></i></button>
+                        <button class="js-delete-btn text-light-textSecondary dark:text-dark-textSecondary hover:text-red-700 dark:hover:text-red-400 transition-colors"><i class="fa-regular fa-trash-can text-sm"></i></button>
+                    </div>
+                </div>
+                <!-- Hidden elements for structural specs -->
+                <span class="js-lead-date hidden">2023-10-05</span>
+            </article>
+
+        </section>
+
+        <!-- 5. EMPTY STATE PANEL -->
+        <section class="js-empty-state hidden flex flex-col items-center justify-center py-32 bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-sm mb-16">
+            <i class="fa-regular fa-folder-open text-4xl text-light-textSecondary/40 dark:text-dark-textSecondary/40 mb-4"></i>
+            <p class="font-sans tracking-widest uppercase text-sm text-light-textSecondary dark:text-dark-textSecondary">No leads found.</p>
+        </section>
+
+        <!-- 7. ANALYTICS CHARTS DASHBOARD -->
+        <section class="mb-16">
+            <h2 class="font-serif text-2xl font-medium text-light-textPrimary dark:text-dark-textPrimary mb-8 border-b border-light-border dark:border-dark-border pb-4">Intelligence Dashboard</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Status Chart -->
+                <div class="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-6 rounded-sm">
+                    <h3 class="font-sans text-xs uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-6">Leads by Status</h3>
+                    <div class="relative h-64 w-full">
+                        <canvas id="statusChart"></canvas>
+                        <div class="js-status-chart-empty absolute inset-0 flex items-center justify-center font-sans tracking-widest text-xs uppercase text-light-textSecondary dark:text-dark-textSecondary hidden">No data yet</div>
+                    </div>
+                </div>
+                <!-- Platform Chart -->
+                <div class="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-6 rounded-sm">
+                    <h3 class="font-sans text-xs uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-6">Leads by Platform</h3>
+                    <div class="relative h-64 w-full">
+                        <canvas id="platformChart"></canvas>
+                        <div class="js-platform-chart-empty absolute inset-0 flex items-center justify-center font-sans tracking-widest text-xs uppercase text-light-textSecondary dark:text-dark-textSecondary hidden">No data yet</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. PREMIUM FINANCIAL SUMMARY OVERVIEW SECTION -->
+      <!-- 6. PREMIUM FINANCIAL SUMMARY OVERVIEW SECTION -->
+<section class="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-8 rounded-sm">
+    <h2 class="font-serif text-2xl text-light-textPrimary dark:text-dark-textPrimary mb-8 border-b border-light-border dark:border-dark-border pb-4">Financial Overview</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Card 1 -->
+        <div class="flex flex-col">
+            <span class="text-xs uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Total Expected Pipeline</span>
+            <span class="font-sans text-2xl text-light-textPrimary dark:text-dark-textPrimary font-semibold js-stat-expected-pipeline">$24,500.00</span>
+            <span class="font-sans text-[11px] text-light-textSecondary dark:text-dark-textSecondary mt-1">Across all active negotiations</span>
+        </div>
+        <!-- Card 2 -->
+        <div class="flex flex-col border-t md:border-t-0 md:border-l border-light-border dark:border-dark-border pt-6 md:pt-0 md:pl-8">
+            <span class="text-xs uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Safe Monetary Value</span>
+            <span class="font-sans text-2xl text-light-accent dark:text-dark-accent font-semibold js-stat-safe-value">$12,000.00</span>
+            <span class="font-sans text-[11px] text-light-textSecondary dark:text-dark-textSecondary mt-1">Total won & secured revenue</span>
+        </div>
+        <!-- Card 3 -->
+        <div class="flex flex-col border-t md:border-t-0 md:border-l border-light-border dark:border-dark-border pt-6 md:pt-0 md:pl-8">
+            <span class="text-xs uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Risk Exposure</span>
+            <span class="font-sans text-2xl text-light-textPrimary dark:text-dark-textPrimary font-semibold js-stat-risk-exposure">$4,500.00</span>
+            <span class="font-sans text-[11px] text-light-textSecondary dark:text-dark-textSecondary mt-1">Pending uncontacted leads</span>
+        </div>
+    </div>
+</section>
+
+
+    </main>
+
+    <!-- ADD / EDIT OVERLAY MODAL SHEET -->
+    <div class="js-modal-backdrop hidden fixed inset-0 z-50 bg-light-bg/80 dark:bg-[#040507]/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border w-full max-w-2xl rounded-sm shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button class="js-close-modal absolute top-6 right-6 text-light-textSecondary dark:text-dark-textSecondary hover:text-light-textPrimary dark:hover:text-dark-textPrimary transition-colors">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="p-8 md:p-10">
+                <h2 class="js-modal-title font-serif text-3xl font-medium text-light-textPrimary dark:text-dark-textPrimary mb-8">Add Lead</h2>
+                
+                <div class="js-form-error hidden mb-6 p-4 border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-900/10 text-red-700 dark:text-red-400 font-sans text-sm tracking-wide rounded-sm">
+                    Please correct the highlighted fields.
+                </div>
+
+                <form class="js-lead-form space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="md:col-span-2">
+                            <label class="block font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Project Title</label>
+                            <input type="text" name="projectTitle" required class="w-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-textPrimary dark:text-dark-textPrimary focus:border-light-accent dark:focus:border-dark-accent focus:ring-1 focus:ring-light-accent dark:focus:ring-dark-accent outline-none font-sans text-sm tracking-wide py-3 px-4 rounded-sm placeholder-light-textSecondary dark:placeholder-dark-textSecondary transition-colors">
+                        </div>
+                        <div>
+                            <label class="block font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Client Name</label>
+                            <input type="text" name="clientName" required class="w-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-textPrimary dark:text-dark-textPrimary focus:border-light-accent dark:focus:border-dark-accent focus:ring-1 focus:ring-light-accent dark:focus:ring-dark-accent outline-none font-sans text-sm tracking-wide py-3 px-4 rounded-sm placeholder-light-textSecondary dark:placeholder-dark-textSecondary transition-colors">
+                        </div>
+                        <div>
+                            <label class="block font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Client Email</label>
+                            <input type="email" name="clientEmail" required class="w-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-textPrimary dark:text-dark-textPrimary focus:border-light-accent dark:focus:border-dark-accent focus:ring-1 focus:ring-light-accent dark:focus:ring-dark-accent outline-none font-sans text-sm tracking-wide py-3 px-4 rounded-sm placeholder-light-textSecondary dark:placeholder-dark-textSecondary transition-colors">
+                        </div>
+                        <div>
+                            <label class="block font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Country</label>
+                            <input type="text" name="country" required class="w-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-textPrimary dark:text-dark-textPrimary focus:border-light-accent dark:focus:border-dark-accent focus:ring-1 focus:ring-light-accent dark:focus:ring-dark-accent outline-none font-sans text-sm tracking-wide py-3 px-4 rounded-sm placeholder-light-textSecondary dark:placeholder-dark-textSecondary transition-colors">
+                        </div>
+                        <div>
+                            <label class="block font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">City</label>
+                            <input type="text" name="city" required class="w-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-textPrimary dark:text-dark-textPrimary focus:border-light-accent dark:focus:border-dark-accent focus:ring-1 focus:ring-light-accent dark:focus:ring-dark-accent outline-none font-sans text-sm tracking-wide py-3 px-4 rounded-sm placeholder-light-textSecondary dark:placeholder-dark-textSecondary transition-colors">
+                        </div>
+                        <div>
+                            <label class="block font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Platform</label>
+                            <div class="relative">
+                                <select name="platform" required class="w-full appearance-none bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-textPrimary dark:text-dark-textPrimary focus:border-light-accent dark:focus:border-dark-accent focus:ring-1 focus:ring-light-accent dark:focus:ring-dark-accent outline-none font-sans text-sm tracking-wide py-3 pl-4 pr-10 rounded-sm cursor-pointer transition-colors">
+                                    <option value="all">All Platforms</option>
+                                    <option value="upwork">Upwork</option>
+                                    <option value="fiverr">Fiverr</option>
+                                    <option value="linkedin">LinkedIn</option>
+                                    <option value="instagram">Instagram</option>
+                                    <option value="whatsapp">WhatsApp</option>
+                                    <option value="facebook">Facebook</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-light-textSecondary dark:text-dark-textSecondary text-xs pointer-events-none"></i>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Budget</label>
+                                <input type="number" name="budget" required class="w-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-textPrimary dark:text-dark-textPrimary focus:border-light-accent dark:focus:border-dark-accent focus:ring-1 focus:ring-light-accent dark:focus:ring-dark-accent outline-none font-sans text-sm tracking-wide py-3 px-4 rounded-sm placeholder-light-textSecondary dark:placeholder-dark-textSecondary transition-colors">
+                            </div>
+                            <div>
+                                <label class="block font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Status</label>
+                                <div class="relative">
+                                    <select name="status" required class="w-full appearance-none bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-textPrimary dark:text-dark-textPrimary focus:border-light-accent dark:focus:border-dark-accent focus:ring-1 focus:ring-light-accent dark:focus:ring-dark-accent outline-none font-sans text-sm tracking-wide py-3 pl-4 pr-10 rounded-sm cursor-pointer transition-colors">
+                                        <option value="pending">Pending</option>
+                                        <option value="contacted">Contacted</option>
+                                        <option value="won">Won</option>
+                                        <option value="lost">Lost</option>
+                                    </select>
+                                    <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-light-textSecondary dark:text-dark-textSecondary text-xs pointer-events-none"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Project Brief</label>
+                            <textarea name="projectBrief" required rows="5" class="w-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-textPrimary dark:text-dark-textPrimary focus:border-light-accent dark:focus:border-dark-accent focus:ring-1 focus:ring-light-accent dark:focus:ring-dark-accent outline-none font-sans text-sm tracking-wide py-4 px-4 rounded-sm placeholder-light-textSecondary dark:placeholder-dark-textSecondary transition-colors resize-none"></textarea>
+                        </div>
+                    </div>
+                    <div class="pt-6 border-t border-light-border dark:border-dark-border flex justify-end">
+                        <button type="submit" class="js-modal-submit font-sans tracking-widest text-xs uppercase px-8 py-4 rounded-sm bg-light-textPrimary dark:bg-dark-textPrimary text-light-bg dark:text-dark-bg hover:bg-light-accent dark:hover:bg-dark-accent transition-all">
+                            Save Lead
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- CREATIVE LEAD DETAIL MODAL SHEET (Asymmetrical Split Layout) -->
+    <div class="js-detail-backdrop hidden fixed inset-0 z-50 bg-light-bg/80 dark:bg-[#040507]/80 backdrop-blur-md flex items-center justify-center p-4 md:p-10">
+        <div class="w-full max-w-5xl h-[85vh] flex flex-col md:flex-row shadow-2xl rounded-sm overflow-hidden border border-light-border dark:border-dark-border relative">
+            <button class="js-close-detail absolute top-6 right-6 z-10 text-light-textSecondary dark:text-dark-textSecondary hover:text-light-textPrimary dark:hover:text-dark-textPrimary transition-colors w-10 h-10 bg-light-card dark:bg-dark-card rounded-full flex items-center justify-center shadow-sm">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            
+            <!-- Left Structural Pillar -->
+            <div class="md:w-1/3 bg-light-bg dark:bg-dark-bg border-b md:border-b-0 md:border-r border-light-border dark:border-dark-border p-8 md:p-12 flex flex-col justify-between overflow-y-auto">
+                <div>
+                    <div class="mb-12">
+                        <span class="js-detail-status inline-flex items-center space-x-2 border border-light-border dark:border-dark-border px-3 py-1 text-[10px] uppercase tracking-widest font-sans rounded-sm text-light-textPrimary dark:text-dark-textPrimary mb-8">
+                            <i class="fa-solid fa-circle text-[6px] text-light-textSecondary dark:text-dark-textSecondary"></i> <span>Status</span>
+                        </span>
+                        <p class="font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Client Identity</p>
+                        <h3 class="js-detail-name font-serif text-2xl text-light-textPrimary dark:text-dark-textPrimary">Client Name</h3>
+                    </div>
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <p class="font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Contact Email</p>
+                            <p class="js-detail-email font-sans tracking-wide text-sm text-light-textPrimary dark:text-dark-textPrimary truncate">client@email.com</p>
+                        </div>
+                        <div>
+                            <p class="font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Location</p>
+                            <p class="js-detail-location font-sans tracking-wide text-sm text-light-textPrimary dark:text-dark-textPrimary">City, Country</p>
+                        </div>
+                        <div>
+                            <p class="font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Sourced From</p>
+                            <p class="js-detail-platform font-sans tracking-wide text-sm text-light-textPrimary dark:text-dark-textPrimary capitalize">Platform</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Structural Pillar -->
+            <div class="md:w-2/3 bg-light-card dark:bg-dark-card p-8 md:p-16 overflow-y-auto">
+                <p class="font-sans text-xs uppercase tracking-[0.2em] text-light-accent dark:text-dark-accent mb-4">Project Overview</p>
+                <h2 class="js-detail-title font-serif text-4xl md:text-5xl font-medium leading-tight text-light-textPrimary dark:text-dark-textPrimary mb-10">Project Title</h2>
+                
+                <div class="js-detail-brief font-sans text-base leading-relaxed tracking-wide text-light-textSecondary dark:text-dark-textSecondary whitespace-pre-line max-w-2xl">
+                    Detailed narrative project brief overview text goes here. This space is dedicated completely to wide typography text delivery, maintaining an elite, expensive split visual look.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://jsdelivr.net"></script>
+</body>
+</html>
