@@ -95,7 +95,7 @@ function renderCards(leadsArray) {
         leadsContainer.innerHTML += `
 
  <article class="lead-card flex flex-col bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-sm transition-all hover:border-light-accent dark:hover:border-dark-accent group" data-id="1">
-                <div class="${lead.id} card-upper-part p-6 flex-1 flex flex-col">
+                <div data-id = "${lead.id}" class="card-upper-part p-6 flex-1 flex flex-col">
                     <div class="flex justify-between items-start mb-4">
                         <span class="inline-flex items-center space-x-2 border border-[#D97706]/30 dark:border-[#F59E0B]/30 bg-[#FFFBEB] dark:bg-[#451A03]/20 text-[#B45309] dark:text-[#FBBF24] px-3 py-1 text-[10px] uppercase tracking-widest font-sans rounded-sm">
                             <i class="fa-solid fa-clock text-[8px]"></i> <span>${lead.leadStatus}</span>
@@ -154,7 +154,7 @@ let card = e.target.closest(".card-upper-part");
 let cardID = Number(card.dataset.id);
 
 let clickedCard = leadsArray.find(lead => lead.id === cardID);
-
+console.log(clickedCard)
 detailBackdrop.innerHTML += `
 
   <div class="w-full max-w-5xl h-[85vh] flex flex-col md:flex-row shadow-2xl rounded-sm overflow-hidden border border-light-border dark:border-dark-border relative">
@@ -167,10 +167,10 @@ detailBackdrop.innerHTML += `
                 <div>
                     <div class="mb-12">
                         <span class="js-detail-status inline-flex items-center space-x-2 border border-light-border dark:border-dark-border px-3 py-1 text-[10px] uppercase tracking-widest font-sans rounded-sm text-light-textPrimary dark:text-dark-textPrimary mb-8">
-                            <i class="fa-solid fa-circle text-[6px] text-light-textSecondary dark:text-dark-textSecondary"></i> <span>Status</span>
+                            <i class="fa-solid fa-circle text-[6px] text-light-textSecondary dark:text-dark-textSecondary"></i> <span>${clickedCard.leadStatus}</span>
                         </span>
                         <p class="font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Client Identity</p>
-                        <h3 class="js-detail-name font-serif text-2xl text-light-textPrimary dark:text-dark-textPrimary">Client Name</h3>
+                        <h3 class="js-detail-name font-serif text-2xl text-light-textPrimary dark:text-dark-textPrimary">${clickedCard.clientName}</h3>
                     </div>
                     
                     <div class="space-y-8">
@@ -180,11 +180,11 @@ detailBackdrop.innerHTML += `
                         </div>
                         <div>
                             <p class="font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Location</p>
-                            <p class="js-detail-location font-sans tracking-wide text-sm text-light-textPrimary dark:text-dark-textPrimary">City, Country</p>
+                            <p class="js-detail-location font-sans tracking-wide text-sm text-light-textPrimary dark:text-dark-textPrimary">${clickedCard.city}, ${clickedCard.country}</p>
                         </div>
                         <div>
                             <p class="font-sans text-[10px] uppercase tracking-widest text-light-textSecondary dark:text-dark-textSecondary mb-2">Sourced From</p>
-                            <p class="js-detail-platform font-sans tracking-wide text-sm text-light-textPrimary dark:text-dark-textPrimary capitalize">Platform</p>
+                            <p class="js-detail-platform font-sans tracking-wide text-sm text-light-textPrimary dark:text-dark-textPrimary capitalize">${clickedCard.platform}</p>
                         </div>
                     </div>
                 </div>
@@ -193,10 +193,10 @@ detailBackdrop.innerHTML += `
             <!-- Right Structural Pillar -->
             <div class="md:w-2/3 bg-light-card dark:bg-dark-card p-8 md:p-16 overflow-y-auto">
                 <p class="font-sans text-xs uppercase tracking-[0.2em] text-light-accent dark:text-dark-accent mb-4">Project Overview</p>
-                <h2 class="js-detail-title font-serif text-4xl md:text-5xl font-medium leading-tight text-light-textPrimary dark:text-dark-textPrimary mb-10">Project Title</h2>
+                <h2 class="js-detail-title font-serif text-4xl md:text-5xl font-medium leading-tight text-light-textPrimary dark:text-dark-textPrimary mb-10">${clickedCard.projectTitle}</h2>
                 
                 <div class="js-detail-brief font-sans text-base leading-relaxed tracking-wide text-light-textSecondary dark:text-dark-textSecondary whitespace-pre-line max-w-2xl">
-                    Detailed narrative project brief overview text goes here. This space is dedicated completely to wide typography text delivery, maintaining an elite, expensive split visual look.
+                    ${clickedCard.projectBrief}
                 </div>
             </div>
         </div>           

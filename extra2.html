@@ -1,3 +1,40 @@
+<!-- Data aur form
+
+Data foundation: leadsArray localStorage se load ho, aur saveToLS() function
+Add Lead form + validation: ek hi modal (edit ke liye bhi), <form> + submit + FormData
+Required: clientName, platform, budget, status
+Optional: country, city, phone, email, projectTitle, projectBrief
+Required khali ho to submit na ho, js-form-error mein error dikhe
+budget Number() mein, phone string mein
+Date tracking: id aur date/time (new Date()) automatically save
+
+Dikhana
+4. Dashboard render: renderLeads(listToShow), har card pe name, platform icon + naam, budget, status badge, date added + “N days ago”, status dropdown, Edit, Delete. Leads na hon to “No leads found.”
+5. Detail modal: card pe click se khule, saari details, khali optional fields pe “Not provided”
+
+Kaam
+6. Delete lead
+7. Status dropdown (change event): Pending, Contacted, Won, Lost
+8. Search + platform filter + status buttons, sab ek applyFilters() se
+9. Stats cards: Total Leads, Pipeline Value (Pending + Contacted), Won Earnings (Won), Win Rate
+10. Edit lead: wahi modal, form prefilled, submit pe update (push nahi)
+11. Dark/light mode, theme localStorage mein
+
+Naye concepts (aakhir mein)
+12. Export to CSV
+13. Chart.js charts: Leads by Status aur Leads by Platform (bar), dark mode colours JS se
+
+Rules
+
+Status: pending, contacted, won, lost
+Platform: upwork, fiverr, linkedin, instagram, whatsapp, facebook, other
+HTML aur JS dono mein lowercase, same spelling
+Har change ke baad: data, saveToLS(), applyFilters()
+
+v2 (abhi nahi): Private Notes, follow-up date, WhatsApp link se chat -->
+
+
+       
        <section class="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border p-8 rounded-sm">
     <h2 class="font-serif text-2xl text-light-textPrimary dark:text-dark-textPrimary mb-8 border-b border-light-border dark:border-dark-border pb-4">Financial Overview</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
