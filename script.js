@@ -139,7 +139,6 @@ function renderCards(leadsArray) {
                 <!-- Hidden elements for structural specs -->
                 <span class="js-lead-date hidden">2023-10-14</span>
             </article>
-
 `
 
     })
