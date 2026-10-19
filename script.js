@@ -88,7 +88,6 @@ if (e.target === detailBackdrop) {
 renderCards(leadsArray);
 
 function renderCards(leadsArray) {
-    
     leadsContainer.innerHTML = "";
 
     leadsArray.forEach(lead => {
