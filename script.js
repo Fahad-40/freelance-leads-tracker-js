@@ -74,11 +74,11 @@ modalBackdrop.addEventListener("click", function (e) {
 
 });
 
-detailBackdrop.addEventListener("click" , (e) => {
-if (e.target === detailBackdrop) {
-    detailBackdrop.classList.add("hidden");
-    
-}
+detailBackdrop.addEventListener("click", (e) => {
+    if (e.target === detailBackdrop) {
+        detailBackdrop.classList.add("hidden");
+
+    }
     else if (e.target.closest(".js-close-detail")) {
         detailBackdrop.classList.add("hidden");
     }
@@ -88,7 +88,7 @@ if (e.target === detailBackdrop) {
 renderCards(leadsArray);
 
 function renderCards(leadsArray) {
-    
+
     leadsContainer.innerHTML = "";
 
     leadsArray.forEach(lead => {
@@ -146,16 +146,16 @@ function renderCards(leadsArray) {
 
 }
 
-leadsContainer.addEventListener("click" , (e) => {
+leadsContainer.addEventListener("click", (e) => {
 
-if (e.target.closest(".card-upper-part")) {
-detailBackdrop.innerHTML = "";
-let card = e.target.closest(".card-upper-part");
-let cardID = Number(card.dataset.id);
+    if (e.target.closest(".card-upper-part")) {
+        detailBackdrop.innerHTML = "";
+        let card = e.target.closest(".card-upper-part");
+        let cardID = Number(card.dataset.id);
 
-let clickedCard = leadsArray.find(lead => lead.id === cardID);
-console.log(clickedCard)
-detailBackdrop.innerHTML += `
+        let clickedCard = leadsArray.find(lead => lead.id === cardID);
+        console.log(clickedCard)
+        detailBackdrop.innerHTML += `
 
   <div class="w-full max-w-5xl h-[85vh] flex flex-col md:flex-row shadow-2xl rounded-sm overflow-hidden border border-light-border dark:border-dark-border relative">
             <button class="js-close-detail absolute top-6 right-6 z-10 text-light-textSecondary dark:text-dark-textSecondary hover:text-light-textPrimary dark:hover:text-dark-textPrimary transition-colors w-10 h-10 bg-light-card dark:bg-dark-card rounded-full flex items-center justify-center shadow-sm">
@@ -203,10 +203,10 @@ detailBackdrop.innerHTML += `
 
 `
 
-    console.log("upper part")
-    detailBackdrop.classList.remove("hidden")
-    detailBackdrop.classList.add("flex")
-}
+        console.log("upper part")
+        detailBackdrop.classList.remove("hidden")
+        detailBackdrop.classList.add("flex")
+    }
 
 
 })
