@@ -121,7 +121,7 @@ function renderCards(leadsArray) {
                     
                     <!-- UPDATED STATUS DROPDOWN SELECTION -->
                     <div class="relative w-36">
-                        <select class="js-status-select w-full appearance-none bg-light-card dark:bg-dark-card text-light-textPrimary dark:text-dark-textPrimary border border-light-border dark:border-dark-border font-sans text-[10px] tracking-widest uppercase py-2 pl-3 pr-10 outline-none rounded-sm cursor-pointer focus:border-light-accent dark:focus:border-dark-accent focus:ring-1 focus:ring-light-accent dark:focus:ring-dark-accent transition-colors">
+                        <select data-id = "${lead.id}" class="js-status-select w-full appearance-none bg-light-card dark:bg-dark-card text-light-textPrimary dark:text-dark-textPrimary border border-light-border dark:border-dark-border font-sans text-[10px] tracking-widest uppercase py-2 pl-3 pr-10 outline-none rounded-sm cursor-pointer focus:border-light-accent dark:focus:border-dark-accent focus:ring-1 focus:ring-light-accent dark:focus:ring-dark-accent transition-colors">
                             <option value="pending" selected>Pending</option>
                             <option value="contacted">Contacted</option>
                             <option value="won">Won</option>
@@ -133,8 +133,8 @@ function renderCards(leadsArray) {
                     </div>
 
                     <div class="flex space-x-3">
-                        <button class="js-edit-btn text-light-textSecondary dark:text-dark-textSecondary hover:text-light-accent dark:hover:text-dark-accent transition-colors"><i class="fa-regular fa-pen-to-square text-sm"></i></button>
-                        <button class="js-delete-btn text-light-textSecondary dark:text-dark-textSecondary hover:text-red-700 dark:hover:text-red-400 transition-colors"><i class="fa-regular fa-trash-can text-sm"></i></button>
+                        <button data-id = "${lead.id}" class="js-edit-btn text-light-textSecondary dark:text-dark-textSecondary hover:text-light-accent dark:hover:text-dark-accent transition-colors"><i class="fa-regular fa-pen-to-square text-sm"></i></button>
+                        <button data-id = "${lead.id}" class="js-delete-btn text-light-textSecondary dark:text-dark-textSecondary hover:text-red-700 dark:hover:text-red-400 transition-colors"><i class="fa-regular fa-trash-can text-sm"></i></button>
                     </div>
                 </div>
                 <!-- Hidden elements for structural specs -->
@@ -147,6 +147,15 @@ function renderCards(leadsArray) {
 }
 
 leadsContainer.addEventListener("click", (e) => {
+
+    if (e.target.closest(".js-delete-btn")) {
+        let card = e.target.closest(".js-delete-btn");
+        let leadID = Number(card.dataset.id)
+        leadsArray = leadsArray.filter(lead => lead.id !== leadID);
+        saveToLS();
+        renderCards(leadsArray);
+        return;
+    }
 
     if (e.target.closest(".card-upper-part")) {
         detailBackdrop.innerHTML = "";
