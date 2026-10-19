@@ -7,7 +7,7 @@ const modalBackdrop = document.querySelector(".js-modal-backdrop");
 const detailBackdrop = document.querySelector(".js-detail-backdrop");
 
 let leadsArray = JSON.parse(localStorage.getItem("LSleadsArray")) || [];
-
+ renderCards(leadsArray);
 function saveToLS() {
     localStorage.setItem("LSleadsArray", JSON.stringify(leadsArray));
 }
@@ -216,6 +216,12 @@ leadsContainer.addEventListener("click", (e) => {
         detailBackdrop.classList.remove("hidden")
         detailBackdrop.classList.add("flex")
     }
+
+
+})
+
+leadsContainer.addEventListener("change", (e) => {
+
 
 
 })
