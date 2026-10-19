@@ -222,6 +222,8 @@ leadsContainer.addEventListener("click", (e) => {
 
 leadsContainer.addEventListener("change", (e) => {
 
-
+if (e.target.closest(".js-status-select")) {
+    
+}
 
 })
