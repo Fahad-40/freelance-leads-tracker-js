@@ -224,7 +224,10 @@ leadsContainer.addEventListener("change", (e) => {
 
     if (e.target.closest(".js-status-select")) {
 
+        let cardSelect = e.target.closest(".js-status-select");
+        let cardSelectID = Number(cardSelect.dataset.id);
 
+        
 
     }
 
