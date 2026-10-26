@@ -211,7 +211,7 @@ leadsContainer.addEventListener("click", (e) => {
         </div>           
 
 `
-     
+        console.log("upper part")
         detailBackdrop.classList.remove("hidden")
         detailBackdrop.classList.add("flex")
     }
