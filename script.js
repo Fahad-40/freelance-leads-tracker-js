@@ -216,8 +216,7 @@ leadsContainer.addEventListener("click", (e) => {
         detailBackdrop.classList.add("flex")
     }
 
-    
-})
+    })
 
 leadsContainer.addEventListener("change", (e) => {
 
