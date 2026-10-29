@@ -1,4 +1,4 @@
-
+const FormModalBackdrop = document.querySelector(".js-modal-backdrop");
 const addLeadBtn = document.querySelector(".js-add-lead-btn");
 const form = document.querySelector(".js-lead-form");
 const leadCard = document.querySelector(".lead-card");
