@@ -81,7 +81,6 @@ detailBackdrop.addEventListener("click", (e) => {
     else if (e.target.closest(".js-close-detail")) {
         detailBackdrop.classList.add("hidden");
     }
-
 })
 
 renderCards(leadsArray);
