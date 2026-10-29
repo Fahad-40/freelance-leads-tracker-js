@@ -6,8 +6,6 @@ const leadsContainer = document.querySelector(".js-leads-container");
 const modalBackdrop = document.querySelector(".js-modal-backdrop");
 const detailBackdrop = document.querySelector(".js-detail-backdrop");
 
-
-
 let leadsArray = JSON.parse(localStorage.getItem("LSleadsArray")) || [];
 renderCards(leadsArray);
 function saveToLS() {
