@@ -58,7 +58,7 @@ form.addEventListener("submit", function (e) {
     leadsArray.push(newLead);
     saveToLS();
     renderCards(leadsArray);
-    console.log(leadsArray)
+   
     form.reset();
     FormModalBackdrop.classList.add("hidden")
     FormModalBackdrop.classList.remove("flex")
