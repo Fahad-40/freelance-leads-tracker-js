@@ -82,7 +82,7 @@ detailBackdrop.addEventListener("click", (e) => {
     else if (e.target.closest(".js-close-detail")) {
         detailBackdrop.classList.add("hidden");
     }
-
+console.log()
 })
 
 renderCards(leadsArray);
@@ -224,7 +224,6 @@ leadsContainer.addEventListener("change", (e) => {
 
         let cardSelect = e.target.closest(".js-status-select");
         let cardSelectID = Number(cardSelect.dataset.id);
-
 
     }
 
