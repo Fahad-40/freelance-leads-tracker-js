@@ -78,6 +78,10 @@ detailBackdrop.addEventListener("click", (e) => {
     if (e.target === detailBackdrop) {
         detailBackdrop.classList.add("hidden");
     }
+    
+    else if (e.target.closest(".js-close-detail")) {
+        detailBackdrop.classList.add("hidden");
+    }
 
 })
 
