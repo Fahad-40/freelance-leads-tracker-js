@@ -78,7 +78,7 @@ detailBackdrop.addEventListener("click", (e) => {
     if (e.target === detailBackdrop) {
         detailBackdrop.classList.add("hidden");
     }
-    
+
     else if (e.target.closest(".js-close-detail")) {
         detailBackdrop.classList.add("hidden");
     }
@@ -215,22 +215,22 @@ leadsContainer.addEventListener("click", (e) => {
         detailBackdrop.classList.add("flex")
     }
 
-    })
+})
 
 leadsContainer.addEventListener("change", (e) => {
-    
+
     if (e.target.closest(".js-status-select")) {
-        
+
 
         let cardSelect = e.target.closest(".js-status-select");
         let cardSelectID = Number(cardSelect.dataset.id);
 
         let changedValue = e.target.value;
-console.log(changedValue)
+        console.log(changedValue)
         let clickedCardDropdown = leadsArray.find(card => card.id === cardSelectID)
 
         clickedCardDropdown.leadStatus = changedValue;
-       saveToLS();
+        saveToLS();
         renderCards(leadsArray);
     }
 
