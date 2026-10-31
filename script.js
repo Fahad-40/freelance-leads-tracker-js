@@ -217,21 +217,21 @@ leadsContainer.addEventListener("click", (e) => {
 
     })
 
-// leadsContainer.addEventListener("change", (e) => {
+leadsContainer.addEventListener("change", (e) => {
     
-//     if (e.target.closest(".js-status-select")) {
+    if (e.target.closest(".js-status-select")) {
         
 
-//         let cardSelect = e.target.closest(".js-status-select");
-//         let cardSelectID = Number(cardSelect.dataset.id);
+        let cardSelect = e.target.closest(".js-status-select");
+        let cardSelectID = Number(cardSelect.dataset.id);
 
-//         let changedValue = e.target.value;
-// console.log(changedValue)
-//         let clickedCardDropdown = leadsArray.find(card => card.id === cardSelectID)
+        let changedValue = e.target.value;
+console.log(changedValue)
+        let clickedCardDropdown = leadsArray.find(card => card.id === cardSelectID)
 
-//         clickedCardDropdown.leadStatus = changedValue;
-//        saveToLS();
-//         renderCards(leadsArray);
-//     }
+        clickedCardDropdown.leadStatus = changedValue;
+       saveToLS();
+        renderCards(leadsArray);
+    }
 
-// })
+})
