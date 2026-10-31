@@ -221,15 +221,17 @@ leadsContainer.addEventListener("change", (e) => {
     
     if (e.target.closest(".js-status-select")) {
         
+
         let cardSelect = e.target.closest(".js-status-select");
         let cardSelectID = Number(cardSelect.dataset.id);
 
         let changedValue = e.target.value;
-
+console.log(changedValue)
         let clickedCardDropdown = leadsArray.find(card => card.id === cardSelectID)
 
-        cardSelectID.status = changedValue;
-       renderCards(leadsArray);
+        clickedCardDropdown.leadStatus = changedValue;
+       saveToLS();
+        renderCards(leadsArray);
     }
 
 })
