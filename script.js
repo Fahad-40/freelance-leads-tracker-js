@@ -225,10 +225,10 @@ leadsContainer.addEventListener("change", (e) => {
         let cardSelectID = Number(cardSelect.dataset.id);
 
         let changedValue = e.target.value;
-        
-    
 
         let clickedCardDropdown = leadsArray.find(card => card.id === cardSelectID)
+
+        
     }
 
 })
