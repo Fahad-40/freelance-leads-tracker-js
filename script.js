@@ -228,7 +228,8 @@ leadsContainer.addEventListener("change", (e) => {
 
         let clickedCardDropdown = leadsArray.find(card => card.id === cardSelectID)
 
-        
+        cardSelectID.status = changedValue;
+       renderCards(leadsArray);
     }
 
 })
