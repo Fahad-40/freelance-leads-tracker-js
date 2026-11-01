@@ -5,6 +5,29 @@ const leadCard = document.querySelector(".lead-card");
 const leadsContainer = document.querySelector(".js-leads-container");
 const modalBackdrop = document.querySelector(".js-modal-backdrop");
 const detailBackdrop = document.querySelector(".js-detail-backdrop");
+const statusFilter = document.querySelector(".status-filter");
+const searchInput = document.querySelector(".js-search-input");
+
+
+let statusStyles = {
+    pending: {
+        label: "Pending",
+        colors: "inline-flex items-center space-x-2 border border-[#DC2626]/30 dark:border-[#EF4444]/30 bg-[#FEF2F2] dark:bg-[#7F1D1D]/20 text-[#B91C1C] dark:text-[#F87171] px-3 py-1 text-[10px] uppercase tracking-widest font-sans rounded-sm",
+    },
+    lost: {
+        label: "Lost",
+        colors: "inline-flex items-center space-x-2 border border-[#DC2626]/30 dark:border-[#EF4444]/30 bg-[#FEF2F2] dark:bg-[#7F1D1D]/20 text-[#B91C1C] dark:text-[#F87171] px-3 py-1 text-[10px] uppercase tracking-widest font-sans rounded-sm",
+    },
+    contacted: {
+        label: "Contacted",
+        colors: "inline-flex items-center space-x-2 border border border-[#2563EB]/30 dark:border-[#3B82F6]/30 bg-[#EFF6FF] dark:bg-[#172554]/20 text-[#1D4ED8] dark:text-[#60A5FA] px-3 py-1 text-[10px] uppercase tracking-widest font-sans rounded-sm",
+    },
+    won: {
+        label: "Won",
+        colors: "inline-flex items-center space-x-2 border border border-[#16A34A]/30 dark:border-[#22C55E]/30 bg-[#F0FDF4] dark:bg-[#052E16]/20 text-[#15803D] dark:text-[#4ADE80] px-3 py-1 text-[10px] uppercase tracking-widest font-sans rounded-sm",
+    },
+};
+
 
 let leadsArray = JSON.parse(localStorage.getItem("LSleadsArray")) || [];
 renderCards(leadsArray);
@@ -51,7 +74,7 @@ form.addEventListener("submit", function (e) {
         city: data.city,
         platform: data.platform,
         budget: Number(data.budget),
-        leadStatus: data.status,
+        leadStatus: data.status.toLowerCase(),
         projectBrief: data.projectBrief
     }
 
@@ -86,18 +109,33 @@ detailBackdrop.addEventListener("click", (e) => {
 
 renderCards(leadsArray);
 
+let currentSearch = "";
+let currentPlatform = "all";
+let currentStatus = "all";
+
+function applyFilters() {
+    let filtered = leadsArray.filter((lead) => {
+        let matchesSearch = lead.clientName.toLowerCase().includes(currentSearch.toLowerCase())
+        let matchesStatus = currentStatus === "all" || lead.leadStatus === currentStatus;
+        return matchesSearch && matchesStatus;
+    })
+    renderCards(filtered)
+}
+
 function renderCards(leadsArray) {
 
     leadsContainer.innerHTML = "";
 
     leadsArray.forEach(lead => {
 
+
         leadsContainer.innerHTML += `
 
  <article class="lead-card flex flex-col bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-sm transition-all hover:border-light-accent dark:hover:border-dark-accent group" data-id="1">
                 <div data-id = "${lead.id}" class="card-upper-part p-6 flex-1 flex flex-col">
                     <div class="flex justify-between items-start mb-4">
-                        <span class="inline-flex items-center space-x-2 border border-[#D97706]/30 dark:border-[#F59E0B]/30 bg-[#FFFBEB] dark:bg-[#451A03]/20 text-[#B45309] dark:text-[#FBBF24] px-3 py-1 text-[10px] uppercase tracking-widest font-sans rounded-sm">
+
+<span class="${statusStyles[lead.leadStatus].colors}">
                             <i class="fa-solid fa-clock text-[8px]"></i> <span>${lead.leadStatus}</span>
                         </span>
                         <span class="js-lead-ago text-light-textSecondary dark:text-dark-textSecondary font-sans text-xs tracking-wide">${timeAgo(lead.leadAddedDate)}</span>
@@ -121,10 +159,10 @@ function renderCards(leadsArray) {
                     <!-- UPDATED STATUS DROPDOWN SELECTION -->
                     <div class="relative w-36">
                         <select data-id = "${lead.id}" class="js-status-select w-full appearance-none bg-light-card dark:bg-dark-card text-light-textPrimary dark:text-dark-textPrimary border border-light-border dark:border-dark-border font-sans text-[10px] tracking-widest uppercase py-2 pl-3 pr-10 outline-none rounded-sm cursor-pointer focus:border-light-accent dark:focus:border-dark-accent focus:ring-1 focus:ring-light-accent dark:focus:ring-dark-accent transition-colors">
-                            <option value="pending" selected>Pending</option>
+                            <option value="${lead.leadStatus}" selected>${lead.leadStatus}</option>
+                            <option value="pending">Pending</option>
                             <option value="contacted">Contacted</option>
                             <option value="won">Won</option>
-                            <option value="lost">Lost</option>
                         </select>
                         <div class="absolute right-0 top-0 bottom-0 w-8 flex items-center justify-center border-l border-light-border dark:border-dark-border pointer-events-none">
                             <i class="fa-solid fa-chevron-down text-light-textSecondary dark:text-dark-textSecondary text-[9px]"></i>
@@ -221,7 +259,6 @@ leadsContainer.addEventListener("change", (e) => {
 
     if (e.target.closest(".js-status-select")) {
 
-
         let cardSelect = e.target.closest(".js-status-select");
         let cardSelectID = Number(cardSelect.dataset.id);
 
@@ -235,3 +272,36 @@ leadsContainer.addEventListener("change", (e) => {
     }
 
 })
+
+statusFilter.addEventListener("click", (e) => {
+    const btn = e.target.closest(".filter-btn");
+    if (!btn) return;
+    currentStatus = btn.dataset.status;
+    applyFilters();
+})
+
+searchInput.addEventListener("click", (e) => {
+    currentSearch = e.target.value;
+    applyFilters();
+})
+
+// else if (e.target.closest(".filter-btn-pending")) {
+//     let filteredArray = leadsArray.filter(card => card.leadStatus === "pending");
+//     console.log("pending")
+//     return renderCards(filteredArray)
+// }
+// else if (e.target.closest(".filter-btn-contacted")) {
+//     let filteredArray = leadsArray.filter(card => card.leadStatus === "contacted");
+//     console.log("pending")
+//     return renderCards(filteredArray)
+// }
+// else if (e.target.closest(".filter-btn-won")) {
+//     let filteredArray = leadsArray.filter(card => card.leadStatus === "won");
+//     console.log("pending")
+//     return renderCards(filteredArray)
+// }
+// else if (e.target.closest(".filter-btn-lost")) {
+//     let filteredArray = leadsArray.filter(card => card.leadStatus === "lost");
+//     console.log("pending")
+//     return renderCards(filteredArray)
+// }
