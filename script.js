@@ -121,8 +121,6 @@ function applyFilters() {
     })
     renderCards(filtered)
 }
-
-
 function renderCards(leadsArray) {
 
     leadsContainer.innerHTML = "";
