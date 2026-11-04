@@ -125,7 +125,7 @@ function applyFilters() {
 function renderCards(leadsArray) {
 
     leadsContainer.innerHTML = "";
-    
+
     leadsArray.forEach(lead => {
 
         leadsContainer.innerHTML += `
