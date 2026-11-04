@@ -245,7 +245,6 @@ leadsContainer.addEventListener("click", (e) => {
                 </div>
             </div>
         </div>           
-
 `
         console.log("upper part")
         detailBackdrop.classList.remove("hidden")
