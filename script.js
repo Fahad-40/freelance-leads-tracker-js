@@ -282,24 +282,3 @@ searchInput.addEventListener("click", (e) => {
     currentSearch = e.target.value;
     applyFilters();
 })
-
-// else if (e.target.closest(".filter-btn-pending")) {
-//     let filteredArray = leadsArray.filter(card => card.leadStatus === "pending");
-//     console.log("pending")
-//     return renderCards(filteredArray)
-// }
-// else if (e.target.closest(".filter-btn-contacted")) {
-//     let filteredArray = leadsArray.filter(card => card.leadStatus === "contacted");
-//     console.log("pending")
-//     return renderCards(filteredArray)
-// }
-// else if (e.target.closest(".filter-btn-won")) {
-//     let filteredArray = leadsArray.filter(card => card.leadStatus === "won");
-//     console.log("pending")
-//     return renderCards(filteredArray)
-// }
-// else if (e.target.closest(".filter-btn-lost")) {
-//     let filteredArray = leadsArray.filter(card => card.leadStatus === "lost");
-//     console.log("pending")
-//     return renderCards(filteredArray)
-// }
