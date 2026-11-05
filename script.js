@@ -283,6 +283,7 @@ searchInput.addEventListener("click", (e) => {
     applyFilters();
 })
 
+
 // else if (e.target.closest(".filter-btn-pending")) {
 //     let filteredArray = leadsArray.filter(card => card.leadStatus === "pending");
 //     console.log("pending")
