@@ -8,18 +8,8 @@ const detailBackdrop = document.querySelector(".js-detail-backdrop");
 const statusFilter = document.querySelector(".status-filter");
 const searchInput = document.querySelector(".js-search-input");
 const wonEl = document.querySelector(".js-stat-won");
+const totalLeadsDisplay = document.querySelector(".js-stat-total");
 
-function renderStats() {
-
-    let wonEarnings = leadsArray.reduce((sum, lead) => {
-        if (lead.leadStatus === "won") {
-            return sum + lead.budget;
-        }
-        return sum;
-    }, 0);
-    wonEl.textContent = wonEarnings 
-
-}
 
 let statusStyles = {
     pending: {
@@ -46,6 +36,19 @@ renderCards(leadsArray);
 function saveToLS() {
     localStorage.setItem("LSleadsArray", JSON.stringify(leadsArray));
 }
+
+function renderStats() {
+
+    let wonEarnings = leadsArray.reduce((sum, lead) => {
+        if (lead.leadStatus === "won") {
+            return sum + lead.budget;
+        }
+        return sum;
+    }, 0);
+    wonEl.textContent = "$" + wonEarnings + ".00" 
+
+}
+renderStats() 
 
 addLeadBtn.addEventListener("click", () => {
     FormModalBackdrop.classList.remove("hidden")
@@ -280,6 +283,7 @@ leadsContainer.addEventListener("change", (e) => {
         clickedCardDropdown.leadStatus = changedValue;
         saveToLS();
         renderCards(leadsArray);
+        renderStats()
     }
 
 })
