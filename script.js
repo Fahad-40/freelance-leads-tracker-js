@@ -10,6 +10,7 @@ const searchInput = document.querySelector(".js-search-input");
 const wonEl = document.querySelector(".js-stat-won");
 const totalLeadsDisplay = document.querySelector(".js-stat-total");
 const pipeLinedDisplay = document.querySelector(".js-stat-pipeline");
+const winRateDisplay = document.querySelector(".js-stat-winrate");
 let winRate = 0;
 
 let statusStyles = {
@@ -58,6 +59,11 @@ function renderStats() {
     const wonCount = leadsArray.filter(function (lead) {
         return lead.leadStatus === "won";
     }).length;
+
+if (leadsArray.length > 0) {
+    winRate = Math.round((wonCount/leadsArray.length) * 100);
+    winRateDisplay.textContent = `${winRate}%`
+}
 
     wonEl.textContent = "$" + wonEarnings + ".00"
     totalLeadsDisplay.textContent = leadsArray.length;
