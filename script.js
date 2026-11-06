@@ -10,7 +10,7 @@ const searchInput = document.querySelector(".js-search-input");
 const wonEl = document.querySelector(".js-stat-won");
 const totalLeadsDisplay = document.querySelector(".js-stat-total");
 const pipeLinedDisplay = document.querySelector(".js-stat-pipeline");
-
+let winRate = 0;
 
 let statusStyles = {
     pending: {
@@ -55,17 +55,16 @@ function renderStats() {
         return sum;
     }, 0);
 
-const wonCount = leadsArray.filter(function (lead) {
-  return lead.leadStatus === "won";
-}).length;
+    const wonCount = leadsArray.filter(function (lead) {
+        return lead.leadStatus === "won";
+    }).length;
 
-
-    wonEl.textContent = "$" + wonEarnings + ".00" 
+    wonEl.textContent = "$" + wonEarnings + ".00"
     totalLeadsDisplay.textContent = leadsArray.length;
-    pipeLinedDisplay.textContent = "$"+pipeLine+".00";
+    pipeLinedDisplay.textContent = "$" + pipeLine + ".00";
 
 }
-renderStats() 
+renderStats()
 
 addLeadBtn.addEventListener("click", () => {
     FormModalBackdrop.classList.remove("hidden")
