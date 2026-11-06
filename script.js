@@ -8,6 +8,16 @@ const detailBackdrop = document.querySelector(".js-detail-backdrop");
 const statusFilter = document.querySelector(".status-filter");
 const searchInput = document.querySelector(".js-search-input");
 
+function renderStats() {
+
+    let wonEarnings = leadsArray.reduce((sum, lead) => {
+        if (lead.leadStatus === "won") {
+            return sum + lead.budget;
+        }
+        return sum;
+    }, 0);
+
+}
 
 let statusStyles = {
     pending: {
