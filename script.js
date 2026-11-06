@@ -7,6 +7,7 @@ const modalBackdrop = document.querySelector(".js-modal-backdrop");
 const detailBackdrop = document.querySelector(".js-detail-backdrop");
 const statusFilter = document.querySelector(".status-filter");
 const searchInput = document.querySelector(".js-search-input");
+const wonEl = document.querySelector(".js-stat-won");
 
 function renderStats() {
 
@@ -16,6 +17,7 @@ function renderStats() {
         }
         return sum;
     }, 0);
+    wonEl.textContent = wonEarnings 
 
 }
 
@@ -130,6 +132,7 @@ function applyFilters() {
         return matchesSearch && matchesStatus;
     })
     renderCards(filtered)
+    renderStats();
 }
 
 function renderCards(leadsArray) {
