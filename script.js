@@ -11,8 +11,9 @@ const wonEl = document.querySelector(".js-stat-won");
 const totalLeadsDisplay = document.querySelector(".js-stat-total");
 const pipeLinedDisplay = document.querySelector(".js-stat-pipeline");
 const winRateDisplay = document.querySelector(".js-stat-winrate");
+const cardEditBtn = document.querySelector(".js-edit-btn");
 let winRate = 0;
-
+let editingId = null;
 let statusStyles = {
     pending: {
         label: "Pending",
@@ -60,10 +61,10 @@ function renderStats() {
         return lead.leadStatus === "won";
     }).length;
 
-if (leadsArray.length > 0) {
-    winRate = Math.round((wonCount/leadsArray.length) * 100);
-    winRateDisplay.textContent = `${winRate}%`
-}
+    if (leadsArray.length > 0) {
+        winRate = Math.round((wonCount / leadsArray.length) * 100);
+        winRateDisplay.textContent = `${winRate}%`
+    }
 
     wonEl.textContent = "$" + wonEarnings + ".00"
     totalLeadsDisplay.textContent = leadsArray.length;
@@ -232,6 +233,14 @@ leadsContainer.addEventListener("click", (e) => {
         renderStats()
         return;
     }
+    if (e.target.closest(".js-edit-btn")) {
+        let card = e.target.closest(".js-edit-btn");
+        let leadID = Number(card.dataset.id)
+        editingId = leadsArray.find(lead => lead.id === leadID);
+        return;
+    }
+
+  
 
     if (e.target.closest(".card-upper-part")) {
         detailBackdrop.innerHTML = "";
