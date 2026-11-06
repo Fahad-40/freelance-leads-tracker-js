@@ -9,6 +9,7 @@ const statusFilter = document.querySelector(".status-filter");
 const searchInput = document.querySelector(".js-search-input");
 const wonEl = document.querySelector(".js-stat-won");
 const totalLeadsDisplay = document.querySelector(".js-stat-total");
+const pipeLinedDisplay = document.querySelector(".js-stat-pipeline");
 
 
 let statusStyles = {
@@ -32,6 +33,7 @@ let statusStyles = {
 
 
 let leadsArray = JSON.parse(localStorage.getItem("LSleadsArray")) || [];
+
 renderCards(leadsArray);
 function saveToLS() {
     localStorage.setItem("LSleadsArray", JSON.stringify(leadsArray));
@@ -45,7 +47,22 @@ function renderStats() {
         }
         return sum;
     }, 0);
+
+    let pipeLine = leadsArray.reduce((sum, lead) => {
+        if (lead.leadStatus === "contacted" || lead.leadStatus === "pending") {
+            return sum + lead.budget;
+        }
+        return sum;
+    }, 0);
+
+const wonCount = leadsArray.filter(function (lead) {
+  return lead.leadStatus === "won";
+}).length;
+
+
     wonEl.textContent = "$" + wonEarnings + ".00" 
+    totalLeadsDisplay.textContent = leadsArray.length;
+    pipeLinedDisplay.textContent = "$"+pipeLine+".00";
 
 }
 renderStats() 
@@ -96,6 +113,7 @@ form.addEventListener("submit", function (e) {
     leadsArray.push(newLead);
     saveToLS();
     renderCards(leadsArray);
+    renderStats()
     console.log(leadsArray)
     form.reset();
     FormModalBackdrop.classList.add("hidden")
@@ -206,6 +224,7 @@ leadsContainer.addEventListener("click", (e) => {
         leadsArray = leadsArray.filter(lead => lead.id !== leadID);
         saveToLS();
         renderCards(leadsArray);
+        renderStats()
         return;
     }
 
