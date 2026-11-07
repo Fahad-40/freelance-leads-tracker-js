@@ -16,16 +16,16 @@ const htmlTag = document.querySelector(".html-tag");
 const colorModeChanger = document.querySelector(".fa-circle-half-stroke");
 
 let colorMode = localStorage.getItem("mode");
-colorModeChanger.addEventListener("click" , () => {
+colorModeChanger.addEventListener("click", () => {
     if (htmlTag.classList.contains("dark")) {
         htmlTag.classList.remove("dark");
         htmlTag.classList.add("light");
         colorMode = localStorage.setItem("mode", "light")
     }
-    else{
+    else {
         htmlTag.classList.remove("light");
         htmlTag.classList.add("dark");
-      
+
         colorMode = localStorage.setItem("mode", "dark")
     }
 })
@@ -121,7 +121,7 @@ form.addEventListener("submit", function (e) {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(form));
 
-   if (editingId) {
+    if (editingId) {
         editingId.projectTitle = data.projectTitle;
         editingId.clientName = data.clientName;
         editingId.clientEmail = data.clientEmail;
@@ -131,10 +131,10 @@ form.addEventListener("submit", function (e) {
         editingId.budget = Number(data.budget);
         editingId.leadStatus = data.status.toLowerCase();
         editingId.projectBrief = data.projectBrief;
-        
-        editingId = null; 
+
+        editingId = null;
     } else {
-     
+
         let newLead = {
             id: Date.now(),
             leadAddedDate: new Date().toISOString(),
@@ -408,8 +408,24 @@ const statusChartEl = document.getElementById("statusChart");
 let statusChart;
 
 function renderCharts() {
-  const statuses = ["pending", "contacted", "won", "lost"];
+    const statuses = ["pending", "contacted", "won", "lost"];
 
-  
+    let counts = statuses.map((status) => {
+        leadsArray.filter((lead) => {
+            return lead.leadStatus === status;
+        }).length;
+    });
+
+    new Chart(canvas, {
+        type: "bar",
+        data: {
+            labels: ["Pending", "Contacted", "Won", "Lost"],
+            datasets: [{ label: laeds, data: counts }]
+        },
+
+        options: { responsive: true, maintainAspectRatio: false }
+
+    })
+
 }
 renderCharts()
