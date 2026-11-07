@@ -11,6 +11,8 @@ const wonEl = document.querySelector(".js-stat-won");
 const totalLeadsDisplay = document.querySelector(".js-stat-total");
 const pipeLinedDisplay = document.querySelector(".js-stat-pipeline");
 const winRateDisplay = document.querySelector(".js-stat-winrate");
+const chartDisplay = document.querySelector(".js-status-chart");
+const platformDisplay = document.querySelector(".js-platform-chart-empty");
 const cardEditBtn = document.querySelector(".js-edit-btn");
 const htmlTag = document.querySelector(".html-tag");
 const colorModeChanger = document.querySelector(".fa-circle-half-stroke");
@@ -366,6 +368,7 @@ leadsContainer.addEventListener("change", (e) => {
         saveToLS();
         renderCards(leadsArray);
         renderStats()
+        renderCharts()
     }
 
 })
@@ -405,27 +408,76 @@ searchInput.addEventListener("click", (e) => {
 // }
 
 const statusChartEl = document.getElementById("statusChart");
+const platformChartEl = document.getElementById("platformChart");
 let statusChart;
+let platformChart;
+
+if (leadsArray.length === 0) {
+    chartDisplay.textContent = "No Data yet"
+}
+else{
+ renderCharts()   
+}
 
 function renderCharts() {
-    const statuses = ["pending", "contacted", "won", "lost"];
+  const statuses = ["pending", "contacted", "won", "lost"];
 
-    let counts = statuses.map((status) => {
-        leadsArray.filter((lead) => {
-            return lead.leadStatus === status;
-        }).length;
-    });
+  const counts = statuses.map(function (s) {
+    return leadsArray.filter(function (lead) {
+      return lead.leadStatus === s;
+    }).length;
+  });
 
-    new Chart(canvas, {
-        type: "bar",
-        data: {
-            labels: ["Pending", "Contacted", "Won", "Lost"],
-            datasets: [{ label: laeds, data: counts }]
-        },
+  if (statusChart) statusChart.destroy();
 
-        options: { responsive: true, maintainAspectRatio: false }
+  statusChart = new Chart(statusChartEl, {
+  type: "bar",
+  data: {
+    labels: ["Pending", "Contacted", "Won", "Lost"],
+    datasets: [
+      {
+        label: "Leads",
+        data: counts,
+        backgroundColor: ["#D97706", "#2563EB", "#16A34A", "#DC2626"],
+        borderRadius: 2,
+        maxBarThickness: 48,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false } },
+      y: {
+        beginAtZero: true,
+        ticks: { precision: 0 },
+        grid: { color: "rgba(128,128,128,0.15)" },
+      },
+    },
+  },
+});
 
-    })
+
+platformChart = new Chart(platformChartEl, {
+  type: "doughnut",
+  data: {
+    labels: ["Upwork", "Fiverr", "LinkedIn", "Instagram", "WhatsApp", "Facebook", "Other"],
+    datasets: [
+      {
+        data: platformCounts,
+        backgroundColor: ["#16A34A", "#EAB308", "#2563EB", "#DB2777", "#0D9488", "#7C3AED", "#6B7280"],
+        borderWidth: 0,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: "65%",
+    plugins: { legend: { position: "bottom", labels: { boxWidth: 12, padding: 16 } } },
+  },
+});
 
 }
-renderCharts()
