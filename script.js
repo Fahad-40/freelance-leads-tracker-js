@@ -461,6 +461,15 @@ function renderCharts() {
 });
 
 
+    const platforms = ["Upwork", "Fiverr", "LinkedIn", "Instagram", "WhatsApp", "Facebook", "Other"];
+    const platformCounts = platforms.map(function (p) {
+        return leadsArray.filter(function (lead) {
+            return lead.platform === p; // Ensure karein aapke lead object me 'platform' property ho
+        }).length;
+    });
+
+  if (platformChart) platformChart.destroy();
+
 platformChart = new Chart(platformChartEl, {
   type: "doughnut",
   data: {
