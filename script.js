@@ -102,21 +102,35 @@ form.addEventListener("submit", function (e) {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(form));
 
-    let newLead = {
-        id: Date.now(),
-        leadAddedDate: new Date().toISOString(),
-        projectTitle: data.projectTitle,
-        clientName: data.clientName,
-        clientEmail: data.clientEmail,
-        country: data.country,
-        city: data.city,
-        platform: data.platform,
-        budget: Number(data.budget),
-        leadStatus: data.status.toLowerCase(),
-        projectBrief: data.projectBrief
+   if (editingId) {
+        editingId.projectTitle = data.projectTitle;
+        editingId.clientName = data.clientName;
+        editingId.clientEmail = data.clientEmail;
+        editingId.country = data.country;
+        editingId.city = data.city;
+        editingId.platform = data.platform;
+        editingId.budget = Number(data.budget);
+        editingId.leadStatus = data.status.toLowerCase();
+        editingId.projectBrief = data.projectBrief;
+        
+        editingId = null; 
+    } else {
+     
+        let newLead = {
+            id: Date.now(),
+            leadAddedDate: new Date().toISOString(),
+            projectTitle: data.projectTitle,
+            clientName: data.clientName,
+            clientEmail: data.clientEmail,
+            country: data.country,
+            city: data.city,
+            platform: data.platform,
+            budget: Number(data.budget),
+            leadStatus: data.status.toLowerCase(),
+            projectBrief: data.projectBrief
+        };
+        leadsArray.push(newLead);
     }
-
-    leadsArray.push(newLead);
     saveToLS();
     renderCards(leadsArray);
     renderStats()
