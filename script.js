@@ -410,21 +410,6 @@ let statusChart;
 function renderCharts() {
   const statuses = ["pending", "contacted", "won", "lost"];
 
-  const counts = statuses.map(function (s) {
-    return leadsArray.filter(function (lead) {
-      return lead.leadStatus === s;
-    }).length;
-  });
-
-  if (statusChart) statusChart.destroy();
-
-  statusChart = new Chart(statusChartEl, {
-    type: "bar",
-    data: {
-      labels: ["Pending", "Contacted", "Won", "Lost"],
-      datasets: [{ label: "Leads", data: counts }],
-    },
-    options: { responsive: true, maintainAspectRatio: false },
-  });
+  
 }
 renderCharts()
