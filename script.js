@@ -237,10 +237,25 @@ leadsContainer.addEventListener("click", (e) => {
         let card = e.target.closest(".js-edit-btn");
         let leadID = Number(card.dataset.id)
         editingId = leadsArray.find(lead => lead.id === leadID);
+
+        form.elements.clientName.value = editingId.clientName
+        form.elements.projectTitle.value = editingId.projectTitle;
+        form.elements.clientName.value = editingId.clientName;
+        form.elements.clientEmail.value = editingId.clientEmail;
+        form.elements.country.value = editingId.country;
+        form.elements.city.value = editingId.city;
+        form.elements.platform.value = editingId.platform;
+        form.elements.budget.value = editingId.budget;
+        form.elements.status.value = editingId.leadStatus;
+        form.elements.projectBrief.value = editingId.projectBrief;
+
+
+        modalBackdrop.classList.remove("hidden");
+        modalBackdrop.classList.add("flex");
         return;
     }
 
-  
+
 
     if (e.target.closest(".card-upper-part")) {
         detailBackdrop.innerHTML = "";
