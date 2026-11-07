@@ -414,6 +414,7 @@ let platformChart;
 
 if (leadsArray.length === 0) {
     chartDisplay.textContent = "No Data yet"
+    platformDisplay.textContent = "No Data yet"
 }
 else{
  renderCharts()   
