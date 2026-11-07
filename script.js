@@ -12,6 +12,25 @@ const totalLeadsDisplay = document.querySelector(".js-stat-total");
 const pipeLinedDisplay = document.querySelector(".js-stat-pipeline");
 const winRateDisplay = document.querySelector(".js-stat-winrate");
 const cardEditBtn = document.querySelector(".js-edit-btn");
+const htmlTag = document.querySelector(".html-tag");
+const colorModeChanger = document.querySelector(".fa-circle-half-stroke");
+
+let colorMode = localStorage.getItem("mode");
+colorModeChanger.addEventListener("click" , () => {
+    if (htmlTag.classList.contains("dark")) {
+        htmlTag.classList.remove("dark");
+        htmlTag.classList.add("light");
+        colorMode = localStorage.setItem("mode", "light")
+    }
+    else{
+        htmlTag.classList.remove("light");
+        htmlTag.classList.add("dark");
+      
+        colorMode = localStorage.setItem("mode", "dark")
+    }
+})
+htmlTag.classList.add(`${colorMode}`)
+
 let winRate = 0;
 let editingId = null;
 let statusStyles = {
@@ -383,3 +402,28 @@ searchInput.addEventListener("click", (e) => {
 //     console.log("pending")
 //     return renderCards(filteredArray)
 // }
+
+const statusChartEl = document.getElementById("statusChart");
+let statusChart;
+
+function renderCharts() {
+  const statuses = ["pending", "contacted", "won", "lost"];
+
+  const counts = statuses.map(function (s) {
+    return leadsArray.filter(function (lead) {
+      return lead.leadStatus === s;
+    }).length;
+  });
+
+  if (statusChart) statusChart.destroy();
+
+  statusChart = new Chart(statusChartEl, {
+    type: "bar",
+    data: {
+      labels: ["Pending", "Contacted", "Won", "Lost"],
+      datasets: [{ label: "Leads", data: counts }],
+    },
+    options: { responsive: true, maintainAspectRatio: false },
+  });
+}
+renderCharts()
