@@ -193,6 +193,7 @@ function applyFilters() {
     })
     renderCards(filtered)
     renderStats();
+    renderCharts()
 }
 
 function renderCards(leadsArray) {
