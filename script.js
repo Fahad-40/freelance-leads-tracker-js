@@ -464,7 +464,7 @@ function renderCharts() {
     const platforms = ["upwork", "fiverr", "linkedin", "instagram", "whatsapp", "facebook", "other"];
     const platformCounts = platforms.map(function (p) {
         return leadsArray.filter(function (lead) {
-            return lead.platform === p; // Ensure karein aapke lead object me 'platform' property ho
+            return lead.platform === p;
         }).length;
     });
 
