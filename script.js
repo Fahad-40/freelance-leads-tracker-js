@@ -17,6 +17,9 @@ const cardEditBtn = document.querySelector(".js-edit-btn");
 const htmlTag = document.querySelector(".html-tag");
 const colorModeChanger = document.querySelector(".fa-circle-half-stroke");
 
+const currentPage = document.body.dataset.page;
+const DASHBOARD_LIMIT = 6; 
+
 let colorMode = localStorage.getItem("mode");
 colorModeChanger.addEventListener("click", () => {
     if (htmlTag.classList.contains("dark")) {
@@ -133,7 +136,7 @@ form.addEventListener("submit", function (e) {
         editingId.budget = Number(data.budget);
         editingId.leadStatus = data.status.toLowerCase();
         editingId.projectBrief = data.projectBrief;
-openedTime: Date.now()
+        editingId.openedTime = Date.now()
         editingId = null;
     } else {
 
@@ -211,6 +214,10 @@ function applyFilters() {
         let matchesStatus = currentStatus === "all" || lead.leadStatus === currentStatus;
         return matchesSearch && matchesStatus;
     })
+    filtered.sort((a,b) => {
+        return b.openedTime - a.openedTime
+    });
+
     renderCards(filtered)
     renderStats();
     renderCharts()
@@ -304,7 +311,6 @@ leadsContainer.addEventListener("click", (e) => {
         form.elements.status.value = editingId.leadStatus;
         form.elements.projectBrief.value = editingId.projectBrief;
 
-
         modalBackdrop.classList.remove("hidden");
         modalBackdrop.classList.add("flex");
         return;
@@ -365,9 +371,9 @@ leadsContainer.addEventListener("click", (e) => {
             </div>
         </div>           
 `
-clickedCard.openedTime = Date.now();
-saveToLS();
-applyFilters()
+        clickedCard.openedTime = Date.now();
+        saveToLS();
+        applyFilters()
         console.log("upper part")
         detailBackdrop.classList.remove("hidden")
         detailBackdrop.classList.add("flex")
