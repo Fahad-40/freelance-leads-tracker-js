@@ -133,7 +133,7 @@ form.addEventListener("submit", function (e) {
         editingId.budget = Number(data.budget);
         editingId.leadStatus = data.status.toLowerCase();
         editingId.projectBrief = data.projectBrief;
-
+openedTime: Date.now()
         editingId = null;
     } else {
 
@@ -148,7 +148,8 @@ form.addEventListener("submit", function (e) {
             platform: data.platform,
             budget: Number(data.budget),
             leadStatus: data.status.toLowerCase(),
-            projectBrief: data.projectBrief
+            projectBrief: data.projectBrief,
+            openedTime: Date.now()
         };
         leadsArray.push(newLead);
     }
