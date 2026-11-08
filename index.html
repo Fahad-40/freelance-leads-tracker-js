@@ -100,7 +100,7 @@
         }
     </style>
 </head>
-<body class="bg-light-bg dark:bg-dark-bg text-light-textPrimary dark:text-dark-textPrimary font-sans transition-colors duration-300 min-h-screen text-left">
+<body data-page ="body" class="bg-light-bg dark:bg-dark-bg text-light-textPrimary dark:text-dark-textPrimary font-sans transition-colors duration-300 min-h-screen text-left">
 
     <!-- MASTER WORKSPACE LAYOUT -->
     <main class="max-w-7xl mx-auto px-6 py-12">
@@ -169,7 +169,7 @@
             </div>
             
             <div class="js-status-row status-filter  flex space-x-2 overflow-x-auto scrollbar-hide py-1">
-                <button class="filter-btn filter-btn-all font-sans text-xs tracking-widest uppercase px-5 py-2.5 rounded-sm transition-all bg-light-textPrimary dark:bg-dark-textPrimary text-light-bg dark:text-dark-bg border border-transparent" data-status="all">All</button>
+                <button class="filter-btn filter-btn-all font-sans text-xs tracking-widest uppercase px-5 py-2.5 rounded-sm transition-all dark:bg-dark-textPrimary text-light-bg dark:text-dark-bg border border-transparent" data-status="all">All</button>
                 <button class="filter-btn filter-btn-pending font-sans text-xs tracking-widest uppercase px-5 py-2.5 rounded-sm transition-all bg-transparent text-light-textSecondary dark:text-dark-textSecondary border border-light-border dark:border-dark-border hover:bg-light-textPrimary/5 dark:hover:bg-white/5" data-status="pending">Pending</button>
                 <button class="filter-btn filter-btn-contacted font-sans text-xs tracking-widest uppercase px-5 py-2.5 rounded-sm transition-all bg-transparent text-light-textSecondary dark:text-dark-textSecondary border border-light-border dark:border-dark-border hover:bg-light-textPrimary/5 dark:hover:bg-white/5" data-status="contacted">Contacted</button>
                 <button class="filter-btn filter-btn-won font-sans text-xs tracking-widest uppercase px-5 py-2.5 rounded-sm transition-all bg-transparent text-light-textSecondary dark:text-dark-textSecondary border border-light-border dark:border-dark-border hover:bg-light-textPrimary/5 dark:hover:bg-white/5" data-status="won">Won</button>
@@ -185,10 +185,16 @@
             <!-- Sample Card 2: Won -->
           
             <!-- Sample Card 3: Lost -->
-         
+
 
         </section>
-
+         
+<div class="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center mt-6">
+                <button class="js-view-all-btn font-sans tracking-widest text-xs uppercase px-8 py-4 rounded-sm bg-transparent border border-light-border dark:border-dark-border text-light-textPrimary dark:text-dark-textPrimary hover:border-light-textPrimary dark:hover:border-dark-textPrimary transition-all flex items-center space-x-3 group">
+                  <a href="lead.html"><span>View All Leads</span></a>  
+                    <i class="fa-solid fa-arrow-right-long text-light-textSecondary dark:text-dark-textSecondary group-hover:text-light-textPrimary dark:group-hover:text-dark-textPrimary transition-colors"></i>
+                </button>
+            </div>
         <!-- 5. EMPTY STATE PANEL  HIDDEN -->
         <section class="js-empty-state hidden flex-col items-center justify-center py-32 bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-sm mb-16">
             <i class="fa-regular fa-folder-open text-4xl text-light-textSecondary/40 dark:text-dark-textSecondary/40 mb-4"></i>
@@ -333,7 +339,7 @@
     <div class="js-detail-backdrop hidden fixed inset-0 z-50 bg-light-bg/80 dark:bg-[#040507]/80 backdrop-blur-md items-center justify-center p-4 md:p-10">
        
     </div>
-
+<a href="lead.html"> <h2>next</h2></a>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
 </body>
 <script src="script.js"></script>

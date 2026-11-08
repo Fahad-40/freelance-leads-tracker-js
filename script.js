@@ -155,6 +155,7 @@ form.addEventListener("submit", function (e) {
     saveToLS();
     renderCards(leadsArray);
     renderStats()
+    renderCharts()
     console.log(leadsArray)
     form.reset();
     FormModalBackdrop.classList.add("hidden")
@@ -187,6 +188,22 @@ let currentSearch = "";
 let currentPlatform = "all";
 let currentStatus = "all";
 
+const baseClasses =
+    "filter-btn font-sans text-xs tracking-widest uppercase px-5 py-2.5 rounded-sm transition-all";
+
+const activeClasses =
+    "bg-light-textPrimary dark:bg-dark-textPrimary text-light-bg dark:text-dark-bg border border-transparent";
+
+const inactiveClasses =
+    "bg-transparent text-light-textSecondary dark:text-dark-textSecondary border border-light-border dark:border-dark-border hover:bg-light-textPrimary/5 dark:hover:bg-white/5";
+
+
+function updatedActiveFilters() {
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+        const isActive = btn.dataset.status === currentStatus;
+        btn.className = baseClasses + " " + (isActive ? activeClasses : inactiveClasses)
+    })
+}
 function applyFilters() {
     let filtered = leadsArray.filter((lead) => {
         let matchesSearch = lead.clientName.toLowerCase().includes(currentSearch.toLowerCase())
@@ -196,6 +213,7 @@ function applyFilters() {
     renderCards(filtered)
     renderStats();
     renderCharts()
+    updatedActiveFilters()
 }
 
 function renderCards(leadsArray) {
@@ -377,6 +395,7 @@ statusFilter.addEventListener("click", (e) => {
     const btn = e.target.closest(".filter-btn");
     if (!btn) return;
     currentStatus = btn.dataset.status;
+
     applyFilters();
 })
 
@@ -416,78 +435,112 @@ if (leadsArray.length === 0) {
     chartDisplay.textContent = "No Data yet"
     platformDisplay.textContent = "No Data yet"
 }
-else{
- renderCharts()   
+else {
+    renderCharts()
 }
 
 function renderCharts() {
-  const statuses = ["pending", "contacted", "won", "lost"];
+    const statuses = ["pending", "contacted", "won", "lost"];
 
-  const counts = statuses.map(function (s) {
-    return leadsArray.filter(function (lead) {
-      return lead.leadStatus === s;
-    }).length;
-  });
-
-  if (statusChart) statusChart.destroy();
-
-  statusChart = new Chart(statusChartEl, {
-  type: "bar",
-  data: {
-    labels: ["Pending", "Contacted", "Won", "Lost"],
-    datasets: [
-      {
-        label: "Leads",
-        data: counts,
-        backgroundColor: ["#D97706", "#2563EB", "#16A34A", "#DC2626"],
-        borderRadius: 2,
-        maxBarThickness: 48,
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
-    scales: {
-      x: { grid: { display: false } },
-      y: {
-        beginAtZero: true,
-        ticks: { precision: 0 },
-        grid: { color: "rgba(128,128,128,0.15)" },
-      },
-    },
-  },
-});
-
-
-    const platforms = ["upwork", "fiverr", "linkedin", "instagram", "whatsapp", "facebook", "other"];
-    const platformCounts = platforms.map(function (p) {
+    const counts = statuses.map(function (s) {
         return leadsArray.filter(function (lead) {
-            return lead.platform === p;
+            return lead.leadStatus === s;
         }).length;
     });
 
-  if (platformChart) platformChart.destroy();
+    if (statusChart) statusChart.destroy();
 
-platformChart = new Chart(platformChartEl, {
-  type: "doughnut",
-  data: {
-    labels: ["Upwork", "Fiverr", "LinkedIn", "Instagram", "WhatsApp", "Facebook", "Other"],
-    datasets: [
-      {
-        data: platformCounts,
-        backgroundColor: ["#16A34A", "#EAB308", "#2563EB", "#DB2777", "#0D9488", "#7C3AED", "#6B7280"],
-        borderWidth: 0,
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    cutout: "65%",
-    plugins: { legend: { position: "bottom", labels: { boxWidth: 12, padding: 16 } } },
-  },
-});
+    statusChart = new Chart(statusChartEl, {
+        type: "bar",
+        data: {
+            labels: ["Pending", "Contacted", "Won", "Lost"],
+            datasets: [
+                {
+                    label: "Leads",
+                    data: counts,
+                    backgroundColor: ["#D97706", "#2563EB", "#16A34A", "#DC2626"],
+                    borderRadius: 2,
+                    maxBarThickness: 48,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { display: false } },
+                y: {
+                    beginAtZero: true,
+                    ticks: { precision: 0 },
+                    grid: { color: "rgba(128,128,128,0.15)" },
+                },
+            },
+        },
+    });
+
+    const platforms = ["upwork", "fiverr", "linkedin", "instagram", "whatsapp", "facebook", "other"];
+    const platformCounts = platforms.map((platform) => {
+        return leadsArray.filter(function (lead) {
+            return lead.platform === platform;
+        }).length;
+    });
+
+    if (platformChart) platformChart.destroy();
+
+    platformChart = new Chart(platformChartEl, {
+        type: "doughnut",
+        data: {
+            labels: ["Upwork", "Fiverr", "LinkedIn", "Instagram", "WhatsApp", "Facebook", "Other"],
+            datasets: [
+                {
+                    data: platformCounts,
+                    backgroundColor: ["#16A34A", "#EAB308", "#2563EB", "#DB2777", "#0D9488", "#7C3AED", "#6B7280"],
+                    borderWidth: 0,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: "55%",
+            plugins: { legend: { position: "bottom", labels: { boxWidth: 12, padding: 16 } } },
+        },
+    });
 
 }
+
+
+const exportBtn = document.querySelector(".js-export-btn");
+
+function escapeCSV(value) {
+    return `"${String(value).replace(/"/g, '""')}"`;
+}
+
+function exportToCSV() {
+    if (leadsArray.length === 0) return;
+
+    const headers = ["clientName", "projectTitle", "clientEmail", "country", "city", "platform", "budget", "leadStatus", "projectBrief", "leadAddedDate"];
+
+    const rows = leadsArray.map(function (lead) {
+        return headers
+            .map(function (h) {
+                return escapeCSV(lead[h]);
+            })
+            .join(",");
+    });
+
+    const csv = "\uFEFF" + [headers.join(","), ...rows].join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "leads.csv";
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+
+exportBtn.addEventListener("click", exportToCSV);
