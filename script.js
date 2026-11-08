@@ -365,6 +365,9 @@ leadsContainer.addEventListener("click", (e) => {
             </div>
         </div>           
 `
+clickedCard.openedTime = Date.now();
+saveToLS();
+applyFilters()
         console.log("upper part")
         detailBackdrop.classList.remove("hidden")
         detailBackdrop.classList.add("flex")
