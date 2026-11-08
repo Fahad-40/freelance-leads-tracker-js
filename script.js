@@ -540,6 +540,7 @@ function exportToCSV() {
     a.download = "leads.csv";
     a.click();
 
+    
     URL.revokeObjectURL(url);
 }
 
